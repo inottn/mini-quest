@@ -1,0 +1,16 @@
+*.log*
+.cache
+.DS_Store
+.idea
+.vscode
+
+# npm
+node_modules
+package-lock.json
+
+# test
+coverage
+
+# dist file
+dist
+index.d.ts
