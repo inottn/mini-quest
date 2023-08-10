@@ -13,10 +13,10 @@ export default function mergeConfig(
   config1: Config = {},
   config2: Config = {},
 ) {
-  const config: Config = { ...config1, ...config2 };
+  const config: Config = Object.assign({}, config1, config2);
 
   config.method = (config2.method || 'get').toUpperCase() as Method;
-  config.headers = { ...config1.headers, ...config2.headers };
+  config.headers = Object.assign({}, config1.headers, config2.headers);
 
   return config;
 }

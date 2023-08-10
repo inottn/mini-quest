@@ -5,7 +5,7 @@ declare const my: any;
 
 export default function adapter(config: Config) {
   const { method, baseURL, url } = config;
-  config = { ...config, url: buildFullPath(baseURL, url!) };
+  config = Object.assign({}, config, { url: buildFullPath(baseURL, url!) });
 
   if (method === 'UPLOAD') {
     return my.uploadFile(config);
