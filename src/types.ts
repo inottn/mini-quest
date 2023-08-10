@@ -39,4 +39,5 @@ export type Config<Data = any> = {
   transformResponse?: MaybeArray<ResponseTransformer>;
   headers?: RequestHeaders;
   data?: Data;
+  flush?: Boolean;
 };

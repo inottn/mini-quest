@@ -1,3 +1,4 @@
+import { lock } from '@inottn/fp-utils';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
@@ -5,6 +6,8 @@ import type { Config, Response } from './types';
 
 export class Request {
   defaults: Config;
+
+  dispatchRequest = lock(dispatchRequest);
 
   interceptors = {
     request: new InterceptorManager<Config>(),
@@ -27,7 +30,7 @@ export class Request {
 
     config = mergeConfig(this.defaults, config);
 
-    const chain: any[] = [dispatchRequest, undefined];
+    const chain: any[] = [this.dispatchRequest, undefined];
     let promise = Promise.resolve(config);
 
     this.interceptors.request.forEach(
@@ -35,6 +38,13 @@ export class Request {
         chain.unshift(interceptor.fulfilled, interceptor.rejected);
       },
     );
+
+    while (chain.length) {
+      promise = promise.then(
+        this.waitForUnlock(chain.shift()),
+        this.waitForUnlock(chain.shift()),
+      );
+    }
 
     this.interceptors.response.forEach(
       function pushResponseInterceptors(interceptor) {
@@ -47,5 +57,23 @@ export class Request {
     }
 
     return promise;
+  }
+
+  lock() {
+    this.dispatchRequest.lock();
+  }
+
+  unlock() {
+    this.dispatchRequest.unlock();
+  }
+
+  waitForUnlock(fn: Function) {
+    return (config: Config) => {
+      if (this.dispatchRequest.isLocked() && !config.flush) {
+        return this.dispatchRequest.waitForUnlock().then(() => fn(config));
+      }
+
+      return fn(config);
+    };
   }
 }

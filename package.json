@@ -60,13 +60,13 @@
     "nano-staged": "^0.8.0",
     "prettier": "^3.0.1",
     "rimraf": "^5.0.1",
-    "rollup": "^3.27.2",
+    "rollup": "^3.28.0",
     "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-esbuild": "^5.0.0",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0"
   },
   "dependencies": {
-    "@inottn/fp-utils": "^0.0.11"
+    "@inottn/fp-utils": "^0.1.0"
   }
 }
