@@ -38,6 +38,7 @@ export type Config<Data = any> = {
   transformRequest?: MaybeArray<RequestTransformer>;
   transformResponse?: MaybeArray<ResponseTransformer>;
   headers?: RequestHeaders;
+  header?: RequestHeaders;
   data?: Data;
   flush?: Boolean;
 };

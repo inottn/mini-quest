@@ -7,7 +7,7 @@ const entries = ['./src/index.ts'];
 const plugins = [
   commonjs(),
   esbuild({
-    target: 'node14',
+    target: 'chrome55',
   }),
 ];
 

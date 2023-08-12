@@ -1,19 +1,18 @@
-import buildFullPath from './buildFullPath';
+import { transformConfig, sdkDownload, sdkRequest, sdkUpload } from './utils';
 import type { Config } from './types';
 
-declare const my: any;
-
 export default function adapter(config: Config) {
-  const { method, baseURL, url } = config;
-  config = Object.assign({}, config, { url: buildFullPath(baseURL, url!) });
+  const { method } = config;
 
-  if (method === 'UPLOAD') {
-    return my.uploadFile(config);
-  }
+  config = transformConfig(config);
 
   if (method === 'DOWNLOAD') {
-    return my.downloadFile(config);
+    return sdkDownload(config);
   }
 
-  return my.request(config);
+  if (method === 'UPLOAD') {
+    return sdkUpload(config);
+  }
+
+  return sdkRequest(config);
 }
