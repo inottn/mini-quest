@@ -1,10 +1,10 @@
 import { withResolvers } from '@inottn/fp-utils';
 import { transformConfig, sdkDownload, sdkRequest, sdkUpload } from './utils';
-import type { Config } from './types';
+import type { Config, Response } from './types';
 
 export default function adapter(config: Config) {
   const { method, success, fail } = config;
-  const { promise, resolve, reject } = withResolvers();
+  const { promise, resolve, reject } = withResolvers<Response>();
 
   config = transformConfig(config);
   config.success = function (response) {
