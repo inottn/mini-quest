@@ -11,7 +11,7 @@ export default function adapter(config: Config) {
     success?.call(config, response);
     resolve(response);
   };
-  config.success = function (error) {
+  config.fail = function (error) {
     fail?.call(config, error);
     reject(error);
   };
