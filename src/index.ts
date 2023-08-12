@@ -7,7 +7,7 @@ import type { Config, Response } from './types';
 export class Request {
   defaults: Config;
 
-  dispatchRequest = lock(dispatchRequest);
+  lockRequest = lock(dispatchRequest);
 
   interceptors = {
     request: new InterceptorManager<Config>(),
@@ -30,7 +30,7 @@ export class Request {
 
     config = mergeConfig(this.defaults, config);
 
-    const chain: any[] = [this.dispatchRequest, undefined];
+    const chain: any[] = [this.lockRequest, undefined];
     let promise = Promise.resolve(config);
 
     this.interceptors.request.forEach(
@@ -60,18 +60,20 @@ export class Request {
   }
 
   lock() {
-    this.dispatchRequest.lock();
+    this.lockRequest.lock();
   }
 
   unlock() {
-    this.dispatchRequest.unlock();
+    this.lockRequest.unlock();
   }
 
   waitForUnlock(fn: Function) {
     return (config: Config) => {
-      if (this.dispatchRequest.isLocked() && !config.flush) {
-        return this.dispatchRequest.waitForUnlock().then(() => fn(config));
+      if (this.lockRequest.isLocked() && !config.flush) {
+        return this.lockRequest.waitForUnlock().then(() => fn(config));
       }
+
+      if (fn === this.lockRequest) return dispatchRequest(config);
 
       return fn(config);
     };
