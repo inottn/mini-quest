@@ -41,4 +41,7 @@ export type Config<Data = any> = {
   header?: RequestHeaders;
   data?: Data;
   flush?: Boolean;
+  success?(response: any): void;
+  fail?(error: any): void;
+  complete?(): void;
 };

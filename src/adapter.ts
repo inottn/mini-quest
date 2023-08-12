@@ -1,18 +1,28 @@
+import { withResolvers } from '@inottn/fp-utils';
 import { transformConfig, sdkDownload, sdkRequest, sdkUpload } from './utils';
 import type { Config } from './types';
 
 export default function adapter(config: Config) {
-  const { method } = config;
+  const { method, success, fail } = config;
+  const { promise, resolve, reject } = withResolvers();
 
   config = transformConfig(config);
+  config.success = function (response) {
+    success?.call(config, response);
+    resolve(response);
+  };
+  config.success = function (error) {
+    fail?.call(config, error);
+    reject(error);
+  };
 
   if (method === 'DOWNLOAD') {
-    return sdkDownload(config);
+    sdkDownload(config);
+  } else if (method === 'UPLOAD') {
+    sdkUpload(config);
+  } else {
+    sdkRequest(config);
   }
 
-  if (method === 'UPLOAD') {
-    return sdkUpload(config);
-  }
-
-  return sdkRequest(config);
+  return promise;
 }

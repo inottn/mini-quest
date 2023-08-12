@@ -52,10 +52,10 @@ export const sdkUpload = sdk.uploadFile.bind(sdk);
 export const sdkDownload = sdk.downloadFile.bind(sdk);
 
 export function transformConfig(config: Config) {
-  const { baseURL, url } = config;
+  const { baseURL, url, method } = config;
   config = Object.assign({}, config, { url: buildFullPath(baseURL, url!) });
 
-  if (!isAlipay && !isDingDing) {
+  if ((!isAlipay && !isDingDing) || ['DOWNLOAD', 'UPLOAD'].includes(method!)) {
     config.header = config.headers;
     delete config.headers;
   }
