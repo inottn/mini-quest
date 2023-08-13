@@ -2,7 +2,7 @@
   <img alt="logo" src="https://fastly.jsdelivr.net/npm/@inottn/assets/miniapp-request/logo.svg" width="420" style="margin-bottom: 10px;">
 </p>
 
-<p align="center">参照 axios API 封装的小程序请求库</p>
+<p align="center">axios API 风格的小程序请求库</p>
 
 ## 安装
 

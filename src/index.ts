@@ -5,7 +5,7 @@ import mergeConfig from './mergeConfig';
 import type { Config, Response } from './types';
 
 export class Request {
-  defaults: Config;
+  defaults?: Config;
 
   lockRequest = lock(dispatchRequest);
 
@@ -14,7 +14,7 @@ export class Request {
     response: new InterceptorManager<Response>(),
   };
 
-  constructor(instanceConfig: Config) {
+  constructor(instanceConfig?: Config) {
     this.defaults = instanceConfig;
   }
 
@@ -57,6 +57,16 @@ export class Request {
     }
 
     return promise;
+  }
+
+  get(url: string, config: Config = {}) {
+    config.method = 'get';
+    return this.request(url, config);
+  }
+
+  post(url: string, config: Config = {}) {
+    config.method = 'post';
+    return this.request(url, config);
   }
 
   lock() {

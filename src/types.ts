@@ -45,3 +45,9 @@ export type Config<Data = any> = {
   fail?(error: any): void;
   complete?(): void;
 };
+
+export type TransformedConfig = {
+  url: string;
+  success(response: any): void;
+  fail(error: any): void;
+};
