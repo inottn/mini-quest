@@ -7,8 +7,9 @@ export default function adapter(config: Config) {
   const { promise, resolve, reject } = withResolvers<Response>();
 
   config = transformConfig(config);
-  config.success = function (response) {
-    success?.call(config, response);
+  config.success = function (rawResponse) {
+    const response = { ...rawResponse, config };
+    success?.call(config, rawResponse);
     resolve(response);
   };
   config.fail = function (error) {

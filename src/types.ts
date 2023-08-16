@@ -16,10 +16,12 @@ export type Method =
 export type RequestHeaders = any;
 export type ResponseHeaders = any;
 
-export type Response<T = any, D = any> = {
+export type RawResponse<T = any> = {
   data: T;
   status: number;
   headers: ResponseHeaders;
+};
+export type Response<T = any, D = any> = RawResponse<T> & {
   config: Config<D>;
 };
 
@@ -41,7 +43,7 @@ export type Config<Data = any> = {
   header?: RequestHeaders;
   data?: Data;
   flush?: Boolean;
-  success?(response: any): void;
+  success?(response: RawResponse): void;
   fail?(error: any): void;
   complete?(): void;
 };

@@ -1,6 +1,6 @@
 type Interceptor<T> = {
-  fulfilled: (value: T | PromiseLike<T>) => void;
-  rejected?: (reason?: any) => void;
+  fulfilled?: (value: T) => T | PromiseLike<T>;
+  rejected?: (reason?: any) => any;
 };
 
 class InterceptorManager<T> {
@@ -15,8 +15,8 @@ class InterceptorManager<T> {
    * @return {Number} An ID used to remove interceptor later
    */
   use(
-    fulfilled: (value: T | PromiseLike<T>) => void,
-    rejected?: (reason?: any) => void,
+    fulfilled?: (value: T) => T | PromiseLike<T>,
+    rejected?: (reason?: any) => any,
   ) {
     this.interceptors.push({
       fulfilled,
