@@ -5,13 +5,15 @@ declare const my: any;
 
 let stubResponse: RawResponse;
 
-vi.stubGlobal('my', {
-  request: (config: TransformedConfig) => {
-    config.complete(stubResponse);
-  },
-  uploadFile: vi.fn(),
-  downloadFile: vi.fn(),
-});
+if (typeof my === 'undefined') {
+  vi.stubGlobal('my', {
+    request: (config: TransformedConfig) => {
+      config.complete(stubResponse);
+    },
+    uploadFile: vi.fn(),
+    downloadFile: vi.fn(),
+  });
+}
 
 const spy = vi.spyOn(my, 'request');
 
