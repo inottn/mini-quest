@@ -18,8 +18,12 @@ export type ResponseHeaders = any;
 
 export type RawResponse<T = any> = {
   data: T;
-  status: number;
-  headers: ResponseHeaders;
+  statusCode?: number;
+  header?: ResponseHeaders;
+  /** 支付宝小程序 支持 */
+  status?: number;
+  /** 支付宝小程序 支持 */
+  headers?: ResponseHeaders;
 };
 export type Response<T = any, D = any> = RawResponse<T> & {
   config: Config<D>;
@@ -43,13 +47,13 @@ export type Config<Data = any> = {
   header?: RequestHeaders;
   data?: Data;
   flush?: Boolean;
-  success?(response: RawResponse): void;
-  fail?(error: any): void;
-  complete?(): void;
+  validateStatus?: (status: number) => boolean;
+  success?: (response: RawResponse) => void;
+  fail?: (error: any) => void;
+  complete?: (response: RawResponse) => void;
 };
 
 export type TransformedConfig = {
   url: string;
-  success(response: any): void;
-  fail(error: any): void;
+  complete(response: RawResponse): void;
 };

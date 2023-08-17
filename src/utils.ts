@@ -1,5 +1,5 @@
 import buildFullPath from './buildFullPath';
-import type { Config } from './types';
+import type { Config, RawResponse, Response } from './types';
 
 declare const wx: any; // 微信小程序
 declare const my: any; // 支付宝小程序
@@ -61,4 +61,21 @@ export function transformConfig(config: Config) {
   }
 
   return config;
+}
+
+export function transformResponse(
+  rawResponse: RawResponse,
+  config: Config,
+): Response {
+  const response = Object.assign({}, rawResponse, { config });
+
+  if (!response.status && response.statusCode) {
+    response.status = response.statusCode;
+  }
+
+  if (!response.headers && response.header) {
+    response.headers = response.header;
+  }
+
+  return response;
 }

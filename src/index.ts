@@ -1,4 +1,5 @@
 import { lock } from '@inottn/fp-utils';
+import defaults from './defaults';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
@@ -15,7 +16,7 @@ export class Request {
   };
 
   constructor(instanceConfig?: Config) {
-    this.defaults = instanceConfig;
+    this.defaults = mergeConfig(defaults, instanceConfig);
   }
 
   request(configOrUrl: string, config: Config): Promise<any>;

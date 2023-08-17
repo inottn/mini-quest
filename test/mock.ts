@@ -7,7 +7,7 @@ let stubResponse: RawResponse;
 
 vi.stubGlobal('my', {
   request: (config: TransformedConfig) => {
-    config.success(stubResponse);
+    config.complete(stubResponse);
   },
   uploadFile: vi.fn(),
   downloadFile: vi.fn(),
