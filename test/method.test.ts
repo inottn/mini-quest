@@ -13,4 +13,15 @@ describe('miniapp-request', () => {
     mockRequest(rawResponse);
     expect(http.get('test')).resolves.toMatchObject(rawResponse);
   });
+
+  it('post', () => {
+    const http = new Request();
+    const rawResponse = {
+      headers: {},
+      status: 200,
+      data: 'test',
+    };
+    mockRequest(rawResponse);
+    expect(http.post('test')).resolves.toMatchObject(rawResponse);
+  });
 });
