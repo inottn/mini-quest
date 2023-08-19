@@ -1,4 +1,4 @@
-import adapter from './adapter';
+import { isFunction } from '@inottn/fp-utils';
 import transformData from './transformData';
 import type { Config, Response } from './types';
 
@@ -17,7 +17,9 @@ export default function dispatchRequest(config: Config) {
     config.data = transformData.call(config, config.transformRequest);
   }
 
-  return adapter(config).then(
+  if (!isFunction(config.adapter)) throw Error('adapter must be a function');
+
+  return config.adapter(config).then(
     function onAdapterResolution(response: Response) {
       // Transform response data
       if (config.transformResponse) {

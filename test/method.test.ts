@@ -1,8 +1,12 @@
-import { describe, expect, it } from 'vitest';
-import { mockRequest } from './mock';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { clearMock, mockRequest } from './mock';
 import { Request } from '../src';
 
 describe('miniapp-request', () => {
+  beforeEach(() => {
+    clearMock();
+  });
+
   it('get', () => {
     const http = new Request();
     const rawResponse = {

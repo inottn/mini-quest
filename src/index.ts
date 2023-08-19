@@ -78,6 +78,10 @@ export class Request {
     this.lockRequest.unlock();
   }
 
+  isLocked() {
+    return this.lockRequest.isLocked();
+  }
+
   waitForUnlock(fn: Function) {
     return (config: Config) => {
       if (this.lockRequest.isLocked() && !config.flush) {
