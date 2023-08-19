@@ -24,8 +24,8 @@ export type RawResponse<T = any> = {
   /** 支付宝小程序 支持 */
   headers?: ResponseHeaders;
 };
-export type Response<T = any, D = any> = RawResponse<T> & {
-  config: Config<D>;
+export type Response<T = any> = RawResponse<T> & {
+  config: Config;
 };
 
 export interface RequestTransformer {
@@ -36,7 +36,7 @@ export interface ResponseTransformer {
   (this: Config, data: any, headers: ResponseHeaders, status?: number): any;
 }
 
-export type Config<Data = any> = {
+export type Config = {
   url?: string;
   method?: Method;
   baseURL?: string;
@@ -44,7 +44,7 @@ export type Config<Data = any> = {
   transformResponse?: MaybeArray<ResponseTransformer>;
   headers?: RequestHeaders;
   header?: RequestHeaders;
-  data?: Data;
+  data?: any;
   adapter?: (config: Config) => Promise<Response>;
   flush?: Boolean;
   validateStatus?: (status: number) => boolean;

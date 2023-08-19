@@ -7,14 +7,14 @@ import mergeConfig from './mergeConfig';
 import type { Config, Response } from './types';
 
 export interface Request {
-  delete<R>(url: string, config?: Config): Promise<R>;
-  download<R>(url: string, config?: Config): Promise<R>;
-  get<R>(url: string, config?: Config): Promise<R>;
-  head<R>(url: string, config?: Config): Promise<R>;
-  options<R>(url: string, config?: Config): Promise<R>;
-  post<R>(url: string, config?: Config): Promise<R>;
-  put<R>(url: string, config?: Config): Promise<R>;
-  upload<R>(url: string, config?: Config): Promise<R>;
+  delete<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  download<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  get<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  head<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  options<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  post<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  put<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
+  upload<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
 }
 
 export class Request {
