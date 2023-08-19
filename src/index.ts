@@ -1,9 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { lock } from '@inottn/fp-utils';
 import defaults from './defaults';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
 import type { Config, Response } from './types';
+
+export interface Request {
+  delete<R>(url: string, config?: Config): Promise<R>;
+  download<R>(url: string, config?: Config): Promise<R>;
+  get<R>(url: string, config?: Config): Promise<R>;
+  head<R>(url: string, config?: Config): Promise<R>;
+  options<R>(url: string, config?: Config): Promise<R>;
+  post<R>(url: string, config?: Config): Promise<R>;
+  put<R>(url: string, config?: Config): Promise<R>;
+  upload<R>(url: string, config?: Config): Promise<R>;
+}
 
 export class Request {
   defaults?: Config;
@@ -17,10 +29,11 @@ export class Request {
 
   constructor(instanceConfig?: Config) {
     this.defaults = mergeConfig(defaults, instanceConfig);
+    this.bindMethods();
   }
 
-  request(configOrUrl: string, config: Config): Promise<any>;
-  request(config: Config): Promise<any>;
+  request<R>(configOrUrl: string, config: Config): Promise<R>;
+  request<R>(config: Config): Promise<R>;
   request(configOrUrl: string | Config, config?: Config) {
     if (typeof configOrUrl === 'string') {
       config = config || {};
@@ -60,14 +73,23 @@ export class Request {
     return promise;
   }
 
-  get(url: string, config: Config = {}) {
-    config.method = 'get';
-    return this.request(url, config);
-  }
-
-  post(url: string, config: Config = {}) {
-    config.method = 'post';
-    return this.request(url, config);
+  bindMethods() {
+    const methods = [
+      'delete',
+      'download',
+      'get',
+      'head',
+      'options',
+      'post',
+      'put',
+      'upload',
+    ] as const;
+    methods.forEach((method) => {
+      this[method] = <R>(url: string, config: Config = {}) => {
+        config.method = method;
+        return this.request<R>(url, config);
+      };
+    });
   }
 
   lock() {

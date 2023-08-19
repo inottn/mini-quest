@@ -9,7 +9,6 @@ export type Method =
   | MethodType<'options'>
   | MethodType<'post'>
   | MethodType<'put'>
-  | MethodType<'patch'>
   | MethodType<'upload'>
   | MethodType<'download'>;
 
