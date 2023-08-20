@@ -6,16 +6,24 @@ import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
 import type { Config, Response } from './types';
 
-export interface Request {
-  delete<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  download<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  get<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  head<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  options<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  post<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  put<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-  upload<D, R = Response<D>>(url: string, config?: Config): Promise<R>;
-}
+type AliasMethod =
+  | 'delete'
+  | 'download'
+  | 'get'
+  | 'head'
+  | 'options'
+  | 'post'
+  | 'put'
+  | 'upload';
+
+type AliasMethodMapped = {
+  [key in AliasMethod]: <D, R = Response<D>>(
+    url: string,
+    config?: Config,
+  ) => Promise<R>;
+};
+
+export interface Request extends AliasMethodMapped {}
 
 export class Request {
   defaults?: Config;
@@ -29,7 +37,7 @@ export class Request {
 
   constructor(instanceConfig?: Config) {
     this.defaults = mergeConfig(defaults, instanceConfig);
-    this.bindMethods();
+    this.bindAliasMethods();
   }
 
   request<R>(configOrUrl: string, config: Config): Promise<R>;
@@ -73,8 +81,8 @@ export class Request {
     return promise;
   }
 
-  bindMethods() {
-    const methods = [
+  private bindAliasMethods() {
+    const methods: AliasMethod[] = [
       'delete',
       'download',
       'get',
@@ -83,7 +91,7 @@ export class Request {
       'post',
       'put',
       'upload',
-    ] as const;
+    ];
     methods.forEach((method) => {
       this[method] = <R>(url: string, config: Config = {}) => {
         config.method = method;
