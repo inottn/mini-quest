@@ -23,9 +23,11 @@ type AliasMethodMapped = {
   ) => Promise<R>;
 };
 
-export interface Request extends AliasMethodMapped {}
+type RequestInstance = Request['request'] & Request;
 
-export class Request {
+interface Request extends AliasMethodMapped {}
+
+class Request {
   defaults?: Config;
 
   lockRequest = lock(dispatchRequest);
@@ -40,9 +42,9 @@ export class Request {
     this.bindAliasMethods();
   }
 
-  request<R>(configOrUrl: string, config: Config): Promise<R>;
-  request<R>(config: Config): Promise<R>;
-  request(configOrUrl: string | Config, config?: Config) {
+  request<R>(configOrUrl: string, config?: Config): Promise<R>;
+  request<R>(config?: Config): Promise<R>;
+  request(configOrUrl?: string | Config, config?: Config) {
     if (typeof configOrUrl === 'string') {
       config = config || {};
       config.url = configOrUrl;
@@ -123,4 +125,17 @@ export class Request {
       return fn(config);
     };
   }
+
+  static create(instanceConfig?: Config) {
+    const instance = new this(instanceConfig);
+    const request = instance.request.bind(instance);
+    Reflect.setPrototypeOf(request, instance);
+    return request as RequestInstance;
+  }
 }
+
+export function create(instanceConfig?: Config) {
+  return Request.create(instanceConfig);
+}
+
+export default create();

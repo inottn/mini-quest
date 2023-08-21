@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { clearMock, mockRequest } from './mock';
-import { Request } from '../src';
+import { create } from '../src';
 
 describe('interceptors', () => {
   beforeEach(() => {
@@ -8,7 +8,7 @@ describe('interceptors', () => {
   });
 
   it('request interceptors', async () => {
-    const http = new Request();
+    const http = create();
     const rawResponse = {
       headers: {},
       status: 200,
@@ -46,7 +46,7 @@ describe('interceptors', () => {
   });
 
   it('response interceptors', async () => {
-    const http = new Request();
+    const http = create();
     const rawResponse = {
       headers: {},
       status: 200,

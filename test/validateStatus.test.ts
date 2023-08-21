@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { mockRequest } from './mock';
-import { Request } from '../src';
+import { create } from '../src';
 
 describe('validateStatus', () => {
   it('default validateStatus', async () => {
-    const http = new Request();
+    const http = create();
     const statusList = [200, 240, 280, 320, 360, 400, 410, 450, 500];
 
     for (const status of statusList) {
@@ -29,7 +29,7 @@ describe('validateStatus', () => {
   });
 
   it('custom validateStatus', async () => {
-    const http = new Request();
+    const http = create();
     const statusList = [200, 240, 280, 320, 360, 400, 410, 450, 500];
     const validateStatus = (status: number) => status >= 200 && status < 400;
 

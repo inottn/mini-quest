@@ -1,24 +1,23 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { clearMock, mockRequest } from './mock';
-import { create } from '../src';
+import defaultInstance, { create } from '../src';
 
 describe('adapter', () => {
   beforeEach(() => {
     clearMock();
   });
 
-  it('default adapter', () => {
-    const http = create();
+  it('default instance', () => {
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
     mockRequest(rawResponse);
-    expect(http.get('test')).resolves.toMatchObject(rawResponse);
+    expect(defaultInstance.get('test')).resolves.toMatchObject(rawResponse);
   });
 
-  it('custom adapter', () => {
+  it('create instance', () => {
     const rawResponse = {
       headers: {},
       status: 200,
