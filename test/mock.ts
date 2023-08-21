@@ -25,3 +25,16 @@ export function mockRequest(response: RawResponse) {
   stubResponse = response;
   return spy;
 }
+
+export function createMockAdapter(response: RawResponse) {
+  let mockResponse = response;
+
+  return {
+    changeMockResponse(response: RawResponse) {
+      mockResponse = response;
+    },
+    mockAdapter() {
+      return Promise.resolve(mockResponse);
+    },
+  };
+}

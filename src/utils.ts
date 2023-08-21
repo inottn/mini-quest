@@ -35,7 +35,17 @@ const getSDK = () => {
   return currentSdk;
 };
 
-export const sdk = getSDK();
+export const sdk = getSDK() ?? {
+  request() {
+    throw Error('platform sdk not found');
+  },
+  uploadFile() {
+    throw Error('platform sdk not found');
+  },
+  downloadFile() {
+    throw Error('platform sdk not found');
+  },
+};
 
 export function getRequest() {
   if (isDingDing) {
