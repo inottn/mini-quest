@@ -3,14 +3,14 @@ import type { MaybeArray } from '@inottn/fp-utils';
 type MethodType<T extends string> = Lowercase<T> | Uppercase<T>;
 
 export type Method =
-  | MethodType<'get'>
   | MethodType<'delete'>
+  | MethodType<'download'>
+  | MethodType<'get'>
   | MethodType<'head'>
   | MethodType<'options'>
   | MethodType<'post'>
   | MethodType<'put'>
-  | MethodType<'upload'>
-  | MethodType<'download'>;
+  | MethodType<'upload'>;
 
 export type RequestHeaders = any;
 export type ResponseHeaders = any;
