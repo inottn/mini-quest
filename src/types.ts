@@ -28,23 +28,23 @@ export type Response<T = any> = RawResponse<T> & {
   config: Config;
 };
 
-export interface RequestTransformer {
-  (this: Config, data: any, headers: RequestHeaders): any;
+export interface RequestTransformer<D = any> {
+  (this: Config, data: D, headers: RequestHeaders): any;
 }
 
-export interface ResponseTransformer {
-  (this: Config, data: any, headers: ResponseHeaders, status?: number): any;
+export interface ResponseTransformer<D = any> {
+  (this: Config, data: D, headers: ResponseHeaders, status?: number): any;
 }
 
-export type Config = {
+export type Config<D = any> = {
   url?: string;
   method?: Method;
   baseURL?: string;
-  transformRequest?: MaybeArray<RequestTransformer>;
-  transformResponse?: MaybeArray<ResponseTransformer>;
+  transformRequest?: MaybeArray<RequestTransformer<D>>;
+  transformResponse?: MaybeArray<ResponseTransformer<D>>;
   headers?: RequestHeaders;
   header?: RequestHeaders;
-  data?: any;
+  data?: D;
   skipLock?: boolean;
   adapter?: (config: Config) => Promise<Response>;
   validateStatus?: (status: number) => boolean;

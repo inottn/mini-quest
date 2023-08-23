@@ -17,9 +17,9 @@ type AliasMethod =
   | 'upload';
 
 type AliasMethodMapped = {
-  [key in AliasMethod]: <D, R = Response<D>>(
+  [key in AliasMethod]: <T, R = Response<T>, D = any>(
     url: string,
-    config?: Config,
+    config?: Config<D>,
   ) => Promise<R>;
 };
 
@@ -42,8 +42,11 @@ class Request {
     this.bindAliasMethods();
   }
 
-  request<R>(configOrUrl: string, config?: Config): Promise<R>;
-  request<R>(config?: Config): Promise<R>;
+  request<T = any, R = Response<T>, D = any>(
+    configOrUrl: string,
+    config?: Config<D>,
+  ): Promise<R>;
+  request<T = any, R = Response<T>, D = any>(config?: Config<D>): Promise<R>;
   request(configOrUrl?: string | Config, config?: Config) {
     if (typeof configOrUrl === 'string') {
       config = config || {};
@@ -95,9 +98,9 @@ class Request {
       'upload',
     ];
     methods.forEach((method) => {
-      this[method] = <R>(url: string, config: Config = {}) => {
+      this[method] = <T, R, D>(url: string, config: Config = {}) => {
         config.method = method;
-        return this.request<R>(url, config);
+        return this.request<T, R, D>(url, config);
       };
     });
   }
