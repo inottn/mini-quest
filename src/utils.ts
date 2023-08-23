@@ -4,7 +4,7 @@ import type { Config, RawResponse, Response } from './types';
 declare const wx: any; // 微信小程序
 declare const my: any; // 支付宝小程序
 declare const dd: any; // 钉钉小程序
-declare const tt: any; // 字节小程序
+declare const tt: any; // 抖音小程序
 declare const qq: any; // QQ小程序
 declare const swan: any; // 百度小程序
 

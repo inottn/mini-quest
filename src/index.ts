@@ -116,7 +116,7 @@ class Request {
 
   waitForUnlock(fn: Function) {
     return (config: Config) => {
-      if (this.lockRequest.isLocked() && !config.flush) {
+      if (this.lockRequest.isLocked() && !config.skipLock) {
         return this.lockRequest.waitForUnlock().then(() => fn(config));
       }
 

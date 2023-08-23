@@ -45,8 +45,8 @@ export type Config = {
   headers?: RequestHeaders;
   header?: RequestHeaders;
   data?: any;
+  skipLock?: boolean;
   adapter?: (config: Config) => Promise<Response>;
-  flush?: Boolean;
   validateStatus?: (status: number) => boolean;
   success?: (response: RawResponse) => void;
   fail?: (error: any) => void;
