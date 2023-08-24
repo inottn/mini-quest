@@ -117,6 +117,10 @@ class Request {
     return this.lockRequest.isLocked();
   }
 
+  release() {
+    this.lockRequest.release();
+  }
+
   waitForUnlock(fn: Function) {
     return (config: Config) => {
       if (this.lockRequest.isLocked() && !config.skipLock) {

@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@inottn/fp-utils':
-    specifier: ^0.3.1
-    version: 0.3.1
+    specifier: ^0.3.3
+    version: 0.3.3
 
 devDependencies:
   '@rollup/plugin-commonjs':
@@ -556,8 +556,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@inottn/fp-utils@0.3.1:
-    resolution: {integrity: sha512-rA6gLA/7xcvHRsGK9IoCtQWO9j8lRhZU71FoN5G9btoxWOxpKjci8+/e17khzPsiGfnVljeuAMgZOhXiuJPs2g==}
+  /@inottn/fp-utils@0.3.3:
+    resolution: {integrity: sha512-Bil7104pcK51gz0XdkDnWdI4BmLsMkDLkr9YFMMuYV0hPfzYQB1RMfwDtkFkYFB1aZhwNrrTOlqDAu5iaraNRw==}
     dev: false
 
   /@isaacs/cliui@8.0.2:

@@ -52,18 +52,68 @@ import http from '@inottn/miniapp-request';
 import { create } from '@inottn/miniapp-request';
 
 const instance = create({
-  baseURL: 'xxxx',
+  baseURL: 'https://base.domain.com',
   headers: { 'X-Custom-Header': 'foobar' },
 });
+```
 
-// 等同于 instance.request
-instance({ url: '/user?id=12345' });
-instance('/user?id=12345');
+发送 GET 请求，`instance` 是 `instance.request` 的一个别名
+
+```js
+instance({ url: '/user?id=1' });
+
+instance('/user?id=1');
+
+instance.request('/user?id=1');
+
+instance.get('/user?id=1');
+
+instance.get('/user', {
+  data: { id: '1' },
+});
+```
+
+发送 POST 请求
+
+```js
+instance({
+  url: '/user/create',
+  methods: 'post',
+  data: {
+    name: 'xxx',
+  },
+});
+
+instance('/user/create', {
+  methods: 'post',
+  data: {
+    name: 'xxx',
+  },
+});
+
+instance.post({
+  url: '/user/create',
+  data: {
+    name: 'xxx',
+  },
+});
+```
+
+并发请求
+
+```js
+Promise.all([instance.get('/user?id=1'), instance.get('/user?id=2')]).then(
+  ([user1, user2]) => {
+    // ...
+  },
+);
 ```
 
 ## 实例方法
 
 为了方便起见，为常用且支持的请求方法提供了别名。不同小程序平台支持的请求方法会有所不同，以实际情况为准。
+
+#### instance(config)
 
 #### instance.request(config)
 
@@ -161,7 +211,7 @@ export function post(url, data, config) {
 
 ## 校验状态码
 
-在微信小程序中，只要成功收到服务器返回，无论 HTTP 状态码是多少都会进入 success 回调。而在支付宝小程序中则还会校验 HTTP 状态码，例如 404、500、504 等状态码会触发 fail 回调。这个时候你可以使用 validateStatus 配置选项自定义哪些 HTTP 状态码是有效的，从而统一多端小程序行为。
+在微信小程序中，只要成功收到服务器返回，无论 HTTP 状态码是多少都会进入 success 回调。而在支付宝小程序中则还会校验 HTTP 状态码，例如 404、500、504 等状态码会触发 fail 回调。这个时候你可以使用 `validateStatus` 配置选项自定义哪些 HTTP 状态码是有效的，从而统一多端小程序行为。
 
 ```js
 instance.get('/user/12345', {
@@ -245,6 +295,7 @@ instance.interceptors.response.use(
 - `instance.lock()` 将请求锁定
 - `instance.unlock()` 将请求解锁
 - `instance.isLocked()` 返回请求是否锁定
+- `instance.release()` 将锁定期间待处理的请求释放
 
 在发送请求时，通常为了安全考虑，会将用于标识用户身份的 token 放在 headers 中。如果在此时尚未获取到 token，则一般会在获取到 token 后再发送请求。然而，若存在多个请求同时并发的情况，可能会导致多次发送获取 token 的请求。
 
@@ -263,12 +314,18 @@ instance.interceptors.request.use(function (config) {
     // 没有 token 时将请求锁定
     instance.lock();
 
-    getToken().then((token) => {
-      config.headers.token = token;
+    getToken()
+      .then((token) => {
+        config.headers.token = token;
 
-      // 获取 token 后将请求解锁
-      instance.unlock();
-    });
+        // 获取 token 后将请求解锁
+        instance.unlock();
+      })
+      .catch(() => {
+        // 获取 token 失败则待处理的请求失效，可以全部释放掉
+        instance.release();
+        instance.unlock();
+      });
   } else {
     config.headers.token = token;
   }
