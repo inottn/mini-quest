@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { clearMock, mockRequest } from './mock';
 import { create } from '../src';
 
-describe('miniapp-request', () => {
+describe('methods', () => {
   beforeEach(() => {
     clearMock();
   });

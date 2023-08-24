@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="logo" src="https://fastly.jsdelivr.net/npm/@inottn/assets/miniapp-request/logo.svg" width="420" style="margin-bottom: 10px;">
+  <img alt="logo" src="https://fastly.jsdelivr.net/npm/@inottn/assets/miniquest/logo.svg" width="420" style="margin-bottom: 10px;">
 </p>
 
 <p align="center">axios API 风格的小程序请求库</p>
@@ -22,54 +22,55 @@
 使用 `pnpm` 安装:
 
 ```bash
-pnpm add @inottn/miniapp-request
+pnpm add @inottn/miniquest
 ```
 
 使用 `yarn` 或 `npm` 安装:
 
 ```bash
 # 使用 yarn
-yarn add @inottn/miniapp-request
+yarn add @inottn/miniquest
 
 # 使用 npm
-npm i @inottn/miniapp-request
+npm i @inottn/miniquest
 ```
 
 ## 基本用例
 
-默认导出一个实例
+默认导出了一个 `MiniQuest` 的实例
 
 ```js
-import instance from '@inottn/miniapp-request';
+import miniquest from '@inottn/miniquest';
 
 // 因为是默认导出，你也可以使用任何你习惯的命名，例如：
-import axios from '@inottn/miniapp-request';
-import http from '@inottn/miniapp-request';
+import axios from '@inottn/miniquest';
+import http from '@inottn/miniquest';
 ```
 
 如果有需要，你也可以使用自定义配置新建一个实例。
 
 ```js
-import { create } from '@inottn/miniapp-request';
+import { create } from '@inottn/miniquest';
 
-const instance = create({
+const miniquest = create({
   baseURL: 'https://base.domain.com',
+  timeout: 1000,
   headers: { 'X-Custom-Header': 'foobar' },
 });
 ```
 
-发送 GET 请求，`instance` 是 `instance.request` 的一个别名
+发送 GET 请求，`miniquest` 是 `miniquest.request` 的别名
 
 ```js
-instance({ url: '/user?id=1' });
+miniquest({ url: '/user?id=1' });
 
-instance('/user?id=1');
+miniquest('/user?id=1');
 
-instance.request('/user?id=1');
+miniquest.request('/user?id=1');
 
-instance.get('/user?id=1');
+miniquest.get('/user?id=1');
 
-instance.get('/user', {
+miniquest.get('/user', {
   data: { id: '1' },
 });
 ```
@@ -77,7 +78,7 @@ instance.get('/user', {
 发送 POST 请求
 
 ```js
-instance({
+miniquest({
   url: '/user/create',
   methods: 'post',
   data: {
@@ -85,14 +86,14 @@ instance({
   },
 });
 
-instance('/user/create', {
+miniquest('/user/create', {
   methods: 'post',
   data: {
     name: 'xxx',
   },
 });
 
-instance.post({
+miniquest.post({
   url: '/user/create',
   data: {
     name: 'xxx',
@@ -103,7 +104,7 @@ instance.post({
 并发请求
 
 ```js
-Promise.all([instance.get('/user?id=1'), instance.get('/user?id=2')]).then(
+Promise.all([miniquest.get('/user?id=1'), miniquest.get('/user?id=2')]).then(
   ([user1, user2]) => {
     // ...
   },
@@ -114,33 +115,33 @@ Promise.all([instance.get('/user?id=1'), instance.get('/user?id=2')]).then(
 
 为了方便起见，为常用且支持的请求方法提供了别名。不同小程序平台支持的请求方法会有所不同，以实际情况为准。
 
-#### instance(config)
+#### miniquest(config)
 
-#### instance.request(config)
+#### miniquest.request(config)
 
-#### instance.request(url[, config])
+#### miniquest.request(url[, config])
 
-#### instance.delete(url[, config])
+#### miniquest.delete(url[, config])
 
-#### instance.download(url[, config])
+#### miniquest.download(url[, config])
 
-#### instance.get(url[, config])
+#### miniquest.get(url[, config])
 
-#### instance.head(url[, config])
+#### miniquest.head(url[, config])
 
-#### instance.options(url[, config])
+#### miniquest.options(url[, config])
 
-#### instance.post(url[, config])
+#### miniquest.post(url[, config])
 
-#### instance.put(url[, config])
+#### miniquest.put(url[, config])
 
-#### instance.upload(url[, config])
+#### miniquest.upload(url[, config])
 
 注意这和 axios 提供的实例方法略有不同，如果你更习惯 axios 提供的传参方式，你也可以基于此再封装一层。
 
 ```js
 export function post(url, data, config) {
-  return instance.post(url, {
+  return miniquest.post(url, {
     ...config,
     data,
   });
@@ -215,7 +216,7 @@ export function post(url, data, config) {
 在微信小程序中，只要成功收到服务器返回，无论 HTTP 状态码是多少都会进入 success 回调。而在支付宝小程序中则还会校验 HTTP 状态码，例如 404、500、504 等状态码会触发 fail 回调。这个时候你可以使用 `validateStatus` 配置选项自定义哪些 HTTP 状态码是有效的，从而统一多端小程序行为。
 
 ```js
-instance.get('/user/12345', {
+miniquest.get('/user/12345', {
   validateStatus: function (status) {
     return status >= 200 && status < 300; // 这是默认配置
   },
@@ -228,7 +229,7 @@ instance.get('/user/12345', {
 
 ```js
 // 添加请求拦截器
-instance.interceptors.request.use(
+miniquest.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么，例如修改请求的配置、请求头、URL，添加认证信息等
     return config;
@@ -240,7 +241,7 @@ instance.interceptors.request.use(
 );
 
 // 添加响应拦截器
-instance.interceptors.response.use(
+miniquest.interceptors.response.use(
   function (response) {
     // 默认 2xx 范围内的 HTTP 状态码都会触发该函数。
     // 对响应数据做点什么
@@ -258,8 +259,8 @@ instance.interceptors.response.use(
 
 如果你添加了多个请求或响应拦截器，它们会按如下顺序执行：
 
-1. 先添加的请求拦截器后执行，后添加的请求拦截器先执行
-2. 先添加的响应拦截器先执行，后添加的响应拦截器后执行
+1. 先添加的请求拦截器后执行，后添加的请求拦截器先执行。
+2. 先添加的响应拦截器先执行，后添加的响应拦截器后执行。
 
 ## 转换器
 
@@ -293,10 +294,10 @@ instance.interceptors.response.use(
 
 当请求锁定后，所有未发送的请求将依次等待，直到请求解锁时才能继续发送。请求锁提供了如下 API：
 
-- `instance.lock()` 将请求锁定
-- `instance.unlock()` 将请求解锁
-- `instance.isLocked()` 返回请求是否锁定
-- `instance.release()` 将锁定期间待处理的请求释放
+- `miniquest.lock()` 将请求锁定
+- `miniquest.unlock()` 将请求解锁
+- `miniquest.isLocked()` 返回请求是否锁定
+- `miniquest.release()` 将锁定期间待处理的请求释放
 
 在发送请求时，通常为了安全考虑，会将用于标识用户身份的 token 放在 headers 中。如果在此时尚未获取到 token，则一般会在获取到 token 后再发送请求。然而，若存在多个请求同时并发的情况，可能会导致多次发送获取 token 的请求。
 
@@ -312,22 +313,22 @@ const getToken = () => {
   // 或者新建一个请求实例获取 token。
 };
 
-instance.interceptors.request.use(function (config) {
+miniquest.interceptors.request.use(function (config) {
   if (!token) {
     // 没有 token 时将请求锁定
-    instance.lock();
+    miniquest.lock();
 
     getToken()
       .then((token) => {
         config.headers.token = token;
 
         // 获取 token 后将请求解锁
-        instance.unlock();
+        miniquest.unlock();
       })
       .catch(() => {
         // 获取 token 失败则待处理的请求失效，可以全部释放掉
-        instance.release();
-        instance.unlock();
+        miniquest.release();
+        miniquest.unlock();
       });
   } else {
     config.headers.token = token;
@@ -344,7 +345,7 @@ instance.interceptors.request.use(function (config) {
 调用 `poll` 后会立即开始轮询。
 
 ```js
-poll(() => instance.get('/user?id=1'), {
+poll(() => miniquest.get('/user?id=1'), {
   validate: (response) => response.success,
   interval: 1000,
   retries: 5,
@@ -354,7 +355,7 @@ poll(() => instance.get('/user?id=1'), {
 也可以调用 `poll.create` 创建一个轮询函数。
 
 ```js
-const pollFn = poll.create(() => instance.get('/user?id=1'), {
+const pollFn = poll.create(() => miniquest.get('/user?id=1'), {
   validate: (response) => response.success,
   interval: 1000,
   retries: 5,

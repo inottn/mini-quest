@@ -1,10 +1,10 @@
 {
-  "name": "@inottn/miniapp-request",
-  "version": "0.0.5",
+  "name": "@inottn/miniquest",
+  "version": "0.0.1",
   "packageManager": "pnpm@8.6.10",
-  "description": "A miniapp request library",
+  "description": "axios API 风格的小程序请求库，适配多个小程序平台",
   "author": "inottn<https://github.com/inottn>",
-  "homepage": "https://github.com/inottn/miniapp-request",
+  "homepage": "https://github.com/inottn/miniquest",
   "main": "dist/index-cjs.js",
   "module": "dist/index-esm.js",
   "types": "index.d.ts",
@@ -34,20 +34,24 @@
     "*.{ts,tsx,js,mjs}": "eslint --fix"
   },
   "keywords": [
-    "js",
-    "miniapp",
+    "miniprogram",
     "request",
     "axios",
     "http",
-    "typescript"
+    "miniapp",
+    "typescript",
+    "js",
+    "cache",
+    "poll",
+    "retry"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inottn/miniapp-request/issues"
+    "url": "https://github.com/inottn/miniquest/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:inottn/miniapp-request.git"
+    "url": "git@github.com:inottn/miniquest.git"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",

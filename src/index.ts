@@ -23,11 +23,11 @@ type AliasMethodMapped = {
   ) => Promise<R>;
 };
 
-type RequestInstance = Request['request'] & Request;
+type MiniQuestInstance = MiniQuest['request'] & MiniQuest;
 
-interface Request extends AliasMethodMapped {}
+interface MiniQuest extends AliasMethodMapped {}
 
-class Request {
+class MiniQuest {
   defaults?: Config;
 
   lockRequest = lock(dispatchRequest);
@@ -137,12 +137,12 @@ class Request {
     const instance = new this(instanceConfig);
     const request = instance.request.bind(instance);
     Reflect.setPrototypeOf(request, instance);
-    return request as RequestInstance;
+    return request as MiniQuestInstance;
   }
 }
 
 export function create(instanceConfig?: Config) {
-  return Request.create(instanceConfig);
+  return MiniQuest.create(instanceConfig);
 }
 
 export default create();
