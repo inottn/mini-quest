@@ -12,6 +12,7 @@
 - 支持 [请求／响应拦截器](#拦截器)
 - 支持 [转换请求和响应数据](#转换器)
 - 支持 [请求锁](#请求锁)
+- 支持 [轮询](#轮询)
 - 支持 上传／下载
 - 支持 自定义适配器
 - 适配 多端小程序（微信、支付宝、百度、抖音等）
@@ -334,4 +335,30 @@ instance.interceptors.request.use(function (config) {
 
   return config;
 });
+```
+
+## 轮询
+
+提供了 `poll` 和 `poll.create` API 用来轮询。
+
+调用 `poll` 后会立即开始轮询。
+
+```js
+poll(() => instance.get('/user?id=1'), {
+  validate: (response) => response.success,
+  interval: 1000,
+  retries: 5,
+});
+```
+
+也可以调用 `poll.create` 创建一个轮询函数。
+
+```js
+const pollFn = poll.create(() => instance.get('/user?id=1'), {
+  validate: (response) => response.success,
+  interval: 1000,
+  retries: 5,
+});
+
+pollFn(); // 开始轮询
 ```

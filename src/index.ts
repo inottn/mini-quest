@@ -146,3 +146,5 @@ export function create(instanceConfig?: Config) {
 }
 
 export default create();
+
+export { poll } from '@inottn/fp-utils';
