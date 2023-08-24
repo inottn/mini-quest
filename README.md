@@ -2,7 +2,7 @@
   <img alt="logo" src="https://fastly.jsdelivr.net/npm/@inottn/assets/miniapp-request/logo.svg" width="420" style="margin-bottom: 10px;">
 </p>
 
-<p align="center">🚧 施工中，axios API 风格的小程序请求库</p>
+<p align="center">axios API 风格的小程序请求库</p>
 
 ## 特性
 
@@ -304,9 +304,11 @@ instance.interceptors.response.use(
 ```js
 let token;
 
+// 获取 token 的请求逻辑
 const getToken = () => {
-  // ...
-  // 获取 token 的请求逻辑
+  // 注意，不要用锁定的请求实例直接获取 token，这会导致死锁。
+  // 可以在获取 token 的请求配置中设置 skipLock 为 true，它表示跳过请求锁。
+  // 或者新建一个请求实例获取 token。
 };
 
 instance.interceptors.request.use(function (config) {
