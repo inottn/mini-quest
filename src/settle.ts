@@ -1,4 +1,5 @@
 import { isFunction } from '@inottn/fp-utils';
+import { createError } from './error';
 import type { Response } from './types';
 
 /**
@@ -13,13 +14,15 @@ export default function settle<T extends Response>(
   reject: (reason?: any) => void,
   response: T,
 ) {
-  const { validateStatus } = response.config;
+  const { config } = response;
+  const { validateStatus } = config;
   if (
     response.status &&
     (!isFunction(validateStatus) || validateStatus(response.status))
   ) {
     resolve(response);
   } else {
-    reject(response);
+    const message = response.status ? 'http status error' : 'request failed';
+    reject(createError(message, { config, response }));
   }
 }
