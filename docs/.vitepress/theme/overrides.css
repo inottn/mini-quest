@@ -1,0 +1,17 @@
+.VPHomeHero .image-bg {
+  opacity: 0.4;
+}
+
+.VPHomeHero .image-src {
+  max-width: 800px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.dark .VPHomeHero .image-bg {
+  opacity: 0.2;
+}
+
+.dark .VPHomeHero .image-src {
+  opacity: 0.4;
+}

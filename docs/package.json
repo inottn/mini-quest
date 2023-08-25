@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "unocss": "^0.55.3",
+    "vite": "^4.4.9",
+    "vitepress": "1.0.0-rc.4"
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
+  }
+}
