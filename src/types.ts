@@ -15,7 +15,7 @@ export type Method =
 export type RequestHeaders = any;
 export type ResponseHeaders = any;
 
-export type RawResponse<T = any> = {
+export interface RawResponse<T = any> {
   data: T;
   statusCode?: number;
   header?: ResponseHeaders;
@@ -23,37 +23,48 @@ export type RawResponse<T = any> = {
   status?: number;
   /** 支付宝小程序 支持 */
   headers?: ResponseHeaders;
-};
-export type Response<T = any> = RawResponse<T> & {
-  config: Config;
-};
+}
+
+export interface Response<T = any> extends RawResponse<T> {
+  headers: ResponseHeaders;
+  status: number;
+  config: RequestConfig;
+}
 
 export interface RequestTransformer<D = any> {
-  (this: Config, data: D, headers: RequestHeaders): any;
+  (this: RequestConfig, data: D, headers: RequestHeaders): any;
 }
 
-export interface ResponseTransformer<D = any> {
-  (this: Config, data: D, headers: ResponseHeaders, status?: number): any;
+export interface ResponseTransformer<T = any> {
+  (
+    this: RequestConfig,
+    data: T,
+    headers: ResponseHeaders,
+    status?: number,
+  ): any;
 }
 
-export type Config<D = any> = {
-  url?: string;
-  method?: Method;
+export interface InstanceConfig<D = any, T = any> {
   baseURL?: string;
-  transformRequest?: MaybeArray<RequestTransformer<D>>;
-  transformResponse?: MaybeArray<ResponseTransformer<D>>;
   headers?: RequestHeaders;
-  header?: RequestHeaders;
-  data?: D;
   skipLock?: boolean;
-  adapter?: (config: Config) => Promise<Response>;
+  transformRequest?: MaybeArray<RequestTransformer<D>>;
+  transformResponse?: MaybeArray<ResponseTransformer<T>>;
+  adapter?: (config: RequestConfig<D, T>) => Promise<Response>;
   validateStatus?: (status: number) => boolean;
-  success?: (response: RawResponse) => void;
+  success?: (response: RawResponse<T>) => void;
   fail?: (error: any) => void;
-  complete?: (response: RawResponse) => void;
-};
+  complete?: (response: RawResponse<T>) => void;
+  [key: string]: any;
+}
 
-export type TransformedConfig = {
+export interface RequestConfigWithoutUrl<D = any, T = any>
+  extends InstanceConfig<D, T> {
+  method?: Method;
+  data?: D;
+}
+
+export interface RequestConfig<D = any, T = any>
+  extends RequestConfigWithoutUrl<D, T> {
   url: string;
-  complete(response: RawResponse): void;
-};
+}

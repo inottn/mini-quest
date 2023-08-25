@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import type { RawResponse, TransformedConfig } from 'src/types';
+import type { RawResponse, RequestConfig } from 'src/types';
 
 declare const my: any;
 
@@ -7,8 +7,8 @@ let stubResponse: RawResponse | null = null;
 
 if (typeof my === 'undefined') {
   vi.stubGlobal('my', {
-    request: (config: TransformedConfig) => {
-      config.complete(stubResponse!);
+    request: (config: RequestConfig) => {
+      config.complete!(stubResponse!);
     },
     uploadFile: vi.fn(),
     downloadFile: vi.fn(),

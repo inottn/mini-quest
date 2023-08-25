@@ -4,7 +4,12 @@ import defaults from './defaults';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
-import type { Config, Response } from './types';
+import type {
+  InstanceConfig,
+  RequestConfigWithoutUrl,
+  RequestConfig,
+  Response,
+} from './types';
 
 type AliasMethod =
   | 'delete'
@@ -19,7 +24,7 @@ type AliasMethod =
 type AliasMethodMapped = {
   [key in AliasMethod]: <T, R = Response<T>, D = any>(
     url: string,
-    config?: Config<D>,
+    config?: RequestConfigWithoutUrl<D>,
   ) => Promise<R>;
 };
 
@@ -28,26 +33,31 @@ type MiniQuestInstance = MiniQuest['request'] & MiniQuest;
 interface MiniQuest extends AliasMethodMapped {}
 
 class MiniQuest {
-  defaults?: Config;
+  defaults?: InstanceConfig;
 
   lockRequest = lock(dispatchRequest);
 
   interceptors = {
-    request: new InterceptorManager<Config>(),
+    request: new InterceptorManager<RequestConfig>(),
     response: new InterceptorManager<Response>(),
   };
 
-  constructor(instanceConfig?: Config) {
+  constructor(instanceConfig?: InstanceConfig) {
     this.defaults = mergeConfig(defaults, instanceConfig);
     this.bindAliasMethods();
   }
 
   request<T = any, R = Response<T>, D = any>(
-    configOrUrl: string,
-    config?: Config<D>,
+    config: RequestConfig<D, T>,
   ): Promise<R>;
-  request<T = any, R = Response<T>, D = any>(config?: Config<D>): Promise<R>;
-  request(configOrUrl?: string | Config, config?: Config) {
+  request<T = any, R = Response<T>, D = any>(
+    configOrUrl: string,
+    config?: RequestConfigWithoutUrl<D, T>,
+  ): Promise<R>;
+  request(
+    configOrUrl?: string | RequestConfig,
+    config?: RequestConfigWithoutUrl,
+  ) {
     if (typeof configOrUrl === 'string') {
       config = config || {};
       config.url = configOrUrl;
@@ -58,7 +68,7 @@ class MiniQuest {
     config = mergeConfig(this.defaults, config);
 
     const chain: any[] = [this.lockRequest, undefined];
-    let promise = Promise.resolve(config);
+    let promise = Promise.resolve(config as RequestConfig);
 
     this.interceptors.request.forEach(
       function unshiftRequestInterceptors(interceptor) {
@@ -98,7 +108,10 @@ class MiniQuest {
       'upload',
     ];
     methods.forEach((method) => {
-      this[method] = <T, R, D>(url: string, config: Config = {}) => {
+      this[method] = <T, R, D>(
+        url: string,
+        config: RequestConfigWithoutUrl = {},
+      ) => {
         config.method = method;
         return this.request<T, R, D>(url, config);
       };
@@ -122,7 +135,7 @@ class MiniQuest {
   }
 
   waitForUnlock(fn: Function) {
-    return (config: Config) => {
+    return (config: RequestConfig) => {
       if (this.lockRequest.isLocked() && !config.skipLock) {
         return this.lockRequest.waitForUnlock().then(() => fn(config));
       }
@@ -133,7 +146,7 @@ class MiniQuest {
     };
   }
 
-  static create(instanceConfig?: Config) {
+  static create(instanceConfig?: InstanceConfig) {
     const instance = new this(instanceConfig);
     const request = instance.request.bind(instance);
     Reflect.setPrototypeOf(request, instance);
@@ -141,10 +154,12 @@ class MiniQuest {
   }
 }
 
-export function create(instanceConfig?: Config) {
+export function create(instanceConfig?: InstanceConfig) {
   return MiniQuest.create(instanceConfig);
 }
 
-export default create();
+const miniquest = create();
+
+export default miniquest;
 
 export { poll } from '@inottn/fp-utils';

@@ -7,9 +7,9 @@ import {
   sdkRequest,
   sdkUpload,
 } from './utils';
-import type { Config, Response } from './types';
+import type { RequestConfig, Response } from './types';
 
-export default function adapter(config: Config) {
+export default function adapter(config: RequestConfig) {
   const { method, complete } = config;
   const { promise, resolve, reject } = withResolvers<Response>();
 

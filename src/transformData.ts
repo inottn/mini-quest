@@ -1,7 +1,7 @@
 import { toArray } from '@inottn/fp-utils';
 import type { MaybeArray } from '@inottn/fp-utils';
 import type {
-  Config,
+  RequestConfig,
   RequestTransformer,
   ResponseTransformer,
   Response,
@@ -15,14 +15,17 @@ import type {
  *
  * @returns {*} The resulting transformed data
  */
-function transformData(this: Config, fns: MaybeArray<RequestTransformer>): any;
 function transformData(
-  this: Config,
+  this: RequestConfig,
+  fns: MaybeArray<RequestTransformer>,
+): any;
+function transformData(
+  this: RequestConfig,
   fns: MaybeArray<ResponseTransformer>,
   response: Response,
 ): any;
 function transformData(
-  this: Config,
+  this: RequestConfig,
   fns: MaybeArray<RequestTransformer | ResponseTransformer>,
   response?: Response,
 ) {

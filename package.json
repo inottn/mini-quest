@@ -24,6 +24,7 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "lint": "eslint ./src --ext .js,.ts,.mjs,.cjs",
+    "lint:tsc": "tsc --noEmit --skipLibCheck",
     "prepare": "husky install"
   },
   "publishConfig": {

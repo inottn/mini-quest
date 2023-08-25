@@ -1,6 +1,6 @@
 import { isFunction } from '@inottn/fp-utils';
 import transformData from './transformData';
-import type { Config, Response } from './types';
+import type { RequestConfig, Response } from './types';
 
 /**
  * Dispatch a request to the server using the configured adapter.
@@ -9,7 +9,7 @@ import type { Config, Response } from './types';
  *
  * @returns {Promise} The Promise to be fulfilled
  */
-export default function dispatchRequest(config: Config) {
+export default function dispatchRequest(config: RequestConfig) {
   // Transform request data
   if (config.transformRequest) {
     // @ts-ignore
