@@ -20,10 +20,9 @@ describe('validateStatus', () => {
           data: 1,
         });
       } else {
-        await expect(http.get('test')).rejects.toMatchObject({
-          status,
-          data: 1,
-        });
+        await expect(http.get('test')).rejects.toThrowError(
+          'http status error',
+        );
       }
     }
   });
@@ -54,10 +53,7 @@ describe('validateStatus', () => {
           http.get('test', {
             validateStatus,
           }),
-        ).rejects.toMatchObject({
-          status,
-          data: 1,
-        });
+        ).rejects.rejects.toThrowError('http status error');
       }
     }
   });
