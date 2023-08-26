@@ -5,7 +5,7 @@ type ErrorMeta = {
   response?: Response;
 };
 
-class MiniQuestError extends Error {
+export class MiniQuestError extends Error {
   config: RequestConfig;
   response?: Response;
 

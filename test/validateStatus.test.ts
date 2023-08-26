@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mockRequest } from './mock';
+import { mockRequest } from './mockAlipaySdk';
 import { create } from '../src';
 
 describe('validateStatus', () => {

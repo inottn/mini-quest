@@ -7,25 +7,25 @@ import {
   sdkRequest,
   sdkUpload,
 } from './utils';
-import type { RequestConfig, Response } from './types';
+import type { MergedRequestConfig, Response } from './types';
 
-export default function adapter(config: RequestConfig) {
+export default function adapter(config: MergedRequestConfig) {
   const { method, complete } = config;
   const { promise, resolve, reject } = withResolvers<Response>();
+  const transformedConfig = transformConfig(config);
 
-  config = transformConfig(config);
-  config.complete = function (rawResponse) {
+  transformedConfig.complete = function (rawResponse) {
     const response = transformResponse(rawResponse, config);
     complete?.call(config, rawResponse);
     settle(resolve, reject, response);
   };
 
   if (method === 'DOWNLOAD') {
-    sdkDownload(config);
+    sdkDownload(transformedConfig);
   } else if (method === 'UPLOAD') {
-    sdkUpload(config);
+    sdkUpload(transformedConfig);
   } else {
-    sdkRequest(config);
+    sdkRequest(transformedConfig);
   }
 
   return promise;

@@ -1,6 +1,7 @@
 import { isFunction } from '@inottn/fp-utils';
 import transformData from './transformData';
-import type { RequestConfig, Response } from './types';
+import type { MiniQuestError } from './error';
+import type { MergedRequestConfig, Response } from './types';
 
 /**
  * Dispatch a request to the server using the configured adapter.
@@ -9,7 +10,7 @@ import type { RequestConfig, Response } from './types';
  *
  * @returns {Promise} The Promise to be fulfilled
  */
-export default function dispatchRequest(config: RequestConfig) {
+export default function dispatchRequest(config: MergedRequestConfig) {
   // Transform request data
   if (config.transformRequest) {
     // @ts-ignore
@@ -32,7 +33,7 @@ export default function dispatchRequest(config: RequestConfig) {
 
       return response;
     },
-    function onAdapterRejection(reason: any) {
+    function onAdapterRejection(reason: MiniQuestError) {
       // Transform response data
       if (reason?.response && config.transformResponse) {
         const { response } = reason;

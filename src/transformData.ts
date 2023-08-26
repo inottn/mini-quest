@@ -41,6 +41,7 @@ function transformData(
       config,
       data,
       headers,
+      // @ts-ignore
       response ? response.status : undefined,
     );
   });

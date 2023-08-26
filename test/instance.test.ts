@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { clearMock, mockRequest } from './mock';
+import { clearMock, mockRequest } from './mockAlipaySdk';
 import defaultInstance, { create } from '../src';
 
 describe('adapter', () => {

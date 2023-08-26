@@ -5,11 +5,12 @@ import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
 import type {
-  Method,
   InstanceConfig,
   RequestConfigWithoutUrl,
   RequestConfig,
   Response,
+  MergedRequestConfig,
+  MergedRequestMethod,
 } from './types';
 
 type AliasMethod =
@@ -39,7 +40,7 @@ class MiniQuest {
   lockRequest = lock(dispatchRequest);
 
   interceptors = {
-    request: new InterceptorManager<RequestConfig>(),
+    request: new InterceptorManager<MergedRequestConfig>(),
     response: new InterceptorManager<Response>(),
   };
 
@@ -57,24 +58,27 @@ class MiniQuest {
   ): Promise<R>;
   request(
     configOrUrl?: string | RequestConfig,
-    config?: RequestConfigWithoutUrl,
+    _config?: RequestConfigWithoutUrl,
   ) {
     if (typeof configOrUrl === 'string') {
-      config = config || {};
-      config.url = configOrUrl;
+      _config = _config || {};
+      _config.url = configOrUrl;
     } else {
-      config = configOrUrl || {};
+      _config = configOrUrl || {};
     }
 
-    config = mergeConfig(this.defaults, config);
-    config.method = (config.method || 'get').toUpperCase() as Method;
+    const config = mergeConfig(this.defaults, _config) as MergedRequestConfig;
+
+    config.method = (
+      config.method || 'get'
+    ).toUpperCase() as MergedRequestMethod;
 
     if (config.method === 'DOWNLOAD' || config.method === 'UPLOAD') {
-      delete config.headers!['content-type'];
+      delete config.headers['content-type'];
     }
 
     const chain: any[] = [this.lockRequest, undefined];
-    let promise = Promise.resolve(config as RequestConfig);
+    let promise = Promise.resolve(config);
 
     this.interceptors.request.forEach(
       function unshiftRequestInterceptors(interceptor) {
@@ -102,6 +106,34 @@ class MiniQuest {
     return promise;
   }
 
+  lock() {
+    this.lockRequest.lock();
+  }
+
+  unlock() {
+    this.lockRequest.unlock();
+  }
+
+  isLocked() {
+    return this.lockRequest.isLocked();
+  }
+
+  release() {
+    this.lockRequest.release();
+  }
+
+  private waitForUnlock(fn: Function) {
+    return (config: MergedRequestConfig) => {
+      if (this.lockRequest.isLocked() && !config.skipLock) {
+        return this.lockRequest.waitForUnlock().then(() => fn(config));
+      }
+
+      if (fn === this.lockRequest) return dispatchRequest(config);
+
+      return fn(config);
+    };
+  }
+
   private bindAliasMethods() {
     const methods: AliasMethod[] = [
       'delete',
@@ -122,34 +154,6 @@ class MiniQuest {
         return this.request<T, R, D>(url, config);
       };
     });
-  }
-
-  lock() {
-    this.lockRequest.lock();
-  }
-
-  unlock() {
-    this.lockRequest.unlock();
-  }
-
-  isLocked() {
-    return this.lockRequest.isLocked();
-  }
-
-  release() {
-    this.lockRequest.release();
-  }
-
-  waitForUnlock(fn: Function) {
-    return (config: RequestConfig) => {
-      if (this.lockRequest.isLocked() && !config.skipLock) {
-        return this.lockRequest.waitForUnlock().then(() => fn(config));
-      }
-
-      if (fn === this.lockRequest) return dispatchRequest(config);
-
-      return fn(config);
-    };
   }
 
   static create(instanceConfig?: InstanceConfig) {

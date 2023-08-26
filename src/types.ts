@@ -12,6 +12,8 @@ export type Method =
   | MethodType<'put'>
   | MethodType<'upload'>;
 
+export type MergedRequestMethod = Uppercase<Method>;
+
 export type RequestHeaders = Record<string, string>;
 export type ResponseHeaders = Record<string, string>;
 
@@ -19,9 +21,7 @@ export interface RawResponse<T = any> {
   data: T;
   statusCode?: number;
   header?: ResponseHeaders;
-  /** 支付宝小程序 支持 */
   status?: number;
-  /** 支付宝小程序 支持 */
   headers?: ResponseHeaders;
 }
 
@@ -50,7 +50,7 @@ export interface InstanceConfig<D = any, T = any> {
   skipLock?: boolean;
   transformRequest?: MaybeArray<RequestTransformer<D>>;
   transformResponse?: MaybeArray<ResponseTransformer<T>>;
-  adapter?: (config: RequestConfig<D, T>) => Promise<Response>;
+  adapter?: (config: MergedRequestConfig<D, T>) => Promise<Response>;
   validateStatus?: (status: number) => boolean;
   success?: (response: RawResponse<T>) => void;
   fail?: (error: any) => void;
@@ -67,4 +67,17 @@ export interface RequestConfigWithoutUrl<D = any, T = any>
 export interface RequestConfig<D = any, T = any>
   extends RequestConfigWithoutUrl<D, T> {
   url: string;
+}
+
+export interface MergedRequestConfig<D = any, T = any>
+  extends RequestConfig<D, T> {
+  method: MergedRequestMethod;
+  headers: RequestHeaders;
+}
+
+export interface TransformedRequestConfig<D = any, T = any>
+  extends RequestConfig<D, T> {
+  method: MergedRequestMethod;
+  header?: RequestHeaders;
+  headers?: RequestHeaders;
 }

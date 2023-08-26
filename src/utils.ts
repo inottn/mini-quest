@@ -1,5 +1,10 @@
 import buildFullPath from './buildFullPath';
-import type { RequestConfig, RawResponse, Response } from './types';
+import type {
+  MergedRequestConfig,
+  RawResponse,
+  Response,
+  TransformedRequestConfig,
+} from './types';
 
 declare const wx: any; // 微信小程序
 declare const my: any; // 支付宝小程序
@@ -61,22 +66,28 @@ export const sdkUpload = sdk.uploadFile.bind(sdk);
 
 export const sdkDownload = sdk.downloadFile.bind(sdk);
 
-export function transformConfig(config: RequestConfig) {
+export function transformConfig(config: MergedRequestConfig) {
   const { baseURL, url, method } = config;
-  config = Object.assign({}, config, { url: buildFullPath(baseURL, url) });
+  const transformedConfig: TransformedRequestConfig = Object.assign(
+    {},
+    config,
+    {
+      url: buildFullPath(baseURL, url),
+    },
+  );
 
   if ((!isAlipay && !isDingDing) || ['DOWNLOAD', 'UPLOAD'].includes(method!)) {
-    config.header = config.headers;
-    delete config.headers;
+    transformedConfig.header = config.headers;
+    delete transformedConfig.headers;
   }
 
-  return config;
+  return transformedConfig;
 }
 
 export function transformResponse(
   rawResponse: RawResponse,
-  config: RequestConfig,
-): Response {
+  config: MergedRequestConfig,
+) {
   const response = Object.assign({}, rawResponse, { config });
 
   if (!response.status && response.statusCode) {
