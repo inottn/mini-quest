@@ -12,8 +12,8 @@ export type Method =
   | MethodType<'put'>
   | MethodType<'upload'>;
 
-export type RequestHeaders = any;
-export type ResponseHeaders = any;
+export type RequestHeaders = Record<string, string>;
+export type ResponseHeaders = Record<string, string>;
 
 export interface RawResponse<T = any> {
   data: T;

@@ -5,6 +5,7 @@ import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
 import type {
+  Method,
   InstanceConfig,
   RequestConfigWithoutUrl,
   RequestConfig,
@@ -66,6 +67,11 @@ class MiniQuest {
     }
 
     config = mergeConfig(this.defaults, config);
+    config.method = (config.method || 'get').toUpperCase() as Method;
+
+    if (config.method === 'DOWNLOAD' || config.method === 'UPLOAD') {
+      delete config.headers!['content-type'];
+    }
 
     const chain: any[] = [this.lockRequest, undefined];
     let promise = Promise.resolve(config as RequestConfig);
