@@ -51,7 +51,7 @@ export interface InstanceConfig<D = any, T = any> {
   transformRequest?: MaybeArray<RequestTransformer<D>>;
   transformResponse?: MaybeArray<ResponseTransformer<T>>;
   adapter?: (config: MergedRequestConfig<D, T>) => Promise<Response>;
-  validateStatus?: (status: number) => boolean;
+  validateStatus?: ((status: number) => boolean) | null;
   success?: (response: RawResponse<T>) => void;
   fail?: (error: any) => void;
   complete?: (response: RawResponse<T>) => void;

@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { clearMock, mockRequest } from './mockAlipaySdk';
+import { createMockAdapter } from './mock';
 import { create } from '../src';
 
 describe('adapter', () => {
@@ -8,25 +9,27 @@ describe('adapter', () => {
   });
 
   it('default adapter', () => {
-    const http = create();
+    const miniquest = create();
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
     mockRequest(rawResponse);
-    expect(http.get('test')).resolves.toMatchObject(rawResponse);
+    expect(miniquest.get('test')).resolves.toMatchObject(rawResponse);
   });
 
   it('custom adapter', () => {
+    const { adapter, setResponse } = createMockAdapter();
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
-    const http = create({
-      adapter: (config) => Promise.resolve({ ...rawResponse, config }),
+    const miniquest = create({
+      adapter,
     });
-    expect(http.get('test')).resolves.toMatchObject(rawResponse);
+    setResponse(rawResponse);
+    expect(miniquest.get('test')).resolves.toMatchObject(rawResponse);
   });
 });

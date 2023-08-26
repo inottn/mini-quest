@@ -1,4 +1,5 @@
 import { isFunction } from '@inottn/fp-utils';
+import createSettle from './settle';
 import transformData from './transformData';
 import type { MiniQuestError } from './error';
 import type { MergedRequestConfig, Response } from './types';
@@ -20,31 +21,34 @@ export default function dispatchRequest(config: MergedRequestConfig) {
 
   if (!isFunction(config.adapter)) throw Error('adapter must be a function');
 
-  return config.adapter(config).then(
-    function onAdapterResolution(response: Response) {
-      // Transform response data
-      if (config.transformResponse) {
-        response.data = transformData.call(
-          config,
-          config.transformResponse,
-          response,
-        );
-      }
+  return config
+    .adapter(config)
+    .then(createSettle(config))
+    .then(
+      function onAdapterResolution(response: Response) {
+        // Transform response data
+        if (config.transformResponse) {
+          response.data = transformData.call(
+            config,
+            config.transformResponse,
+            response,
+          );
+        }
 
-      return response;
-    },
-    function onAdapterRejection(reason: MiniQuestError) {
-      // Transform response data
-      if (reason?.response && config.transformResponse) {
-        const { response } = reason;
-        response.data = transformData.call(
-          config,
-          config.transformResponse,
-          response,
-        );
-      }
+        return response;
+      },
+      function onAdapterRejection(reason: MiniQuestError) {
+        // Transform response data
+        if (reason?.response && config.transformResponse) {
+          const { response } = reason;
+          response.data = transformData.call(
+            config,
+            config.transformResponse,
+            response,
+          );
+        }
 
-      return Promise.reject(reason);
-    },
-  );
+        return Promise.reject(reason);
+      },
+    );
 }

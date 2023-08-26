@@ -1,31 +1,32 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { clearMock, mockRequest } from './mockAlipaySdk';
-import defaultInstance, { create } from '../src';
+import { describe, expect, it } from 'vitest';
+import { createMockAdapter } from './mock';
+import miniquest, { create } from '../src';
 
-describe('adapter', () => {
-  beforeEach(() => {
-    clearMock();
-  });
-
+describe('instance', () => {
   it('default instance', () => {
+    const { adapter, setResponse } = createMockAdapter();
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
-    mockRequest(rawResponse);
-    expect(defaultInstance.get('test')).resolves.toMatchObject(rawResponse);
+    setResponse(rawResponse);
+    expect(miniquest.get('test', { adapter })).resolves.toMatchObject(
+      rawResponse,
+    );
   });
 
   it('create instance', () => {
+    const { adapter, setResponse } = createMockAdapter();
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
-    const http = create({
-      adapter: (config) => Promise.resolve({ ...rawResponse, config }),
+    setResponse(rawResponse);
+    const miniquest = create({
+      adapter,
     });
-    expect(http.get('test')).resolves.toMatchObject(rawResponse);
+    expect(miniquest.get('test')).resolves.toMatchObject(rawResponse);
   });
 });

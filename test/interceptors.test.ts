@@ -1,41 +1,38 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { clearMock, mockRequest } from './mockAlipaySdk';
+import { describe, expect, it } from 'vitest';
+import { createMockAdapter } from './mock';
 import { create } from '../src';
 
 describe('interceptors', () => {
-  beforeEach(() => {
-    clearMock();
-  });
-
   it('request interceptors', async () => {
-    const http = create();
+    const { adapter, setResponse } = createMockAdapter();
+    const miniquest = create({ adapter });
     const rawResponse = {
       headers: {},
       status: 200,
       data: 1,
     };
-    const spy = mockRequest(rawResponse);
 
-    http.interceptors.request.use((config) => {
+    setResponse(rawResponse);
+    miniquest.interceptors.request.use((config) => {
       expect(config).toMatchObject({
         headers: { customField1: 'second', customField2: 'second' },
       });
       config.headers.customField3 = 'third';
       return config;
     });
-    http.interceptors.request.use((config) => {
+    miniquest.interceptors.request.use((config) => {
       expect(config).toMatchObject({ headers: { customField1: 'first' } });
       config.headers.customField1 = 'second';
       config.headers.customField2 = 'second';
       return config;
     });
-    http.interceptors.request.use((config) => {
+    miniquest.interceptors.request.use((config) => {
       config.headers.customField1 = 'first';
       return config;
     });
-    await http.get('test');
+    await miniquest.get('test');
 
-    const { lastCall } = spy.mock;
+    const { lastCall } = adapter.mock;
     expect(lastCall?.[0]).toMatchObject({
       headers: {
         customField1: 'second',
@@ -46,26 +43,27 @@ describe('interceptors', () => {
   });
 
   it('response interceptors', async () => {
-    const http = create();
+    const { adapter, setResponse } = createMockAdapter();
+    const miniquest = create({ adapter });
     const rawResponse = {
       headers: {},
       status: 200,
       data: 1,
     };
 
-    mockRequest(rawResponse);
-    http.interceptors.response.use((response) => {
+    setResponse(rawResponse);
+    miniquest.interceptors.response.use((response) => {
       expect(response).toMatchObject(response);
       response.data = 'first';
       return response;
     });
-    http.interceptors.response.use((response) => {
+    miniquest.interceptors.response.use((response) => {
       expect(response).toMatchObject({ data: 'first' });
       response.data = 'second';
       return response;
     });
 
-    const response = await http.get('test');
+    const response = await miniquest.get('test');
     expect(response).toMatchObject({ data: 'second' });
   });
 });
