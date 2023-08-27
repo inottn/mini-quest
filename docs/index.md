@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: MiniQuest
-  text: axios API 风格的小程序请求库
-  tagline: 适配多个小程序平台，支持拦截器、转换器、请求锁、缓存、轮询、错误重试等功能
+  text: Axios API 风格的小程序 HTTP 请求库
+  tagline: 使用简单，并适配多个小程序平台，支持拦截器、转换器、请求锁、缓存、轮询、错误重试等功能
   image:
     src: https://fastly.jsdelivr.net/npm/@inottn/assets/miniquest/logo.svg
   actions:
