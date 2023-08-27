@@ -115,27 +115,25 @@ Promise.all([miniquest.get('/user?id=1'), miniquest.get('/user?id=2')]).then(
 
 为了方便起见，为常用且支持的请求方法提供了别名。不同小程序平台支持的请求方法会有所不同，以实际情况为准。
 
-#### miniquest(config)
+- miniquest.request(config)
 
-#### miniquest.request(config)
+- miniquest.request(url[, config])
 
-#### miniquest.request(url[, config])
+- miniquest.delete(url[, config])
 
-#### miniquest.delete(url[, config])
+- miniquest.download(url[, config])
 
-#### miniquest.download(url[, config])
+- miniquest.get(url[, config])
 
-#### miniquest.get(url[, config])
+- miniquest.head(url[, config])
 
-#### miniquest.head(url[, config])
+- miniquest.options(url[, config])
 
-#### miniquest.options(url[, config])
+- miniquest.post(url[, config])
 
-#### miniquest.post(url[, config])
+- miniquest.put(url[, config])
 
-#### miniquest.put(url[, config])
-
-#### miniquest.upload(url[, config])
+- miniquest.upload(url[, config])
 
 注意这和 axios 提供的实例方法略有不同，如果你更习惯 axios 提供的传参方式，你也可以基于此再封装一层。
 
@@ -158,7 +156,7 @@ export function post(url, data, config) {
 
 ```js
 {
-  // 用于请求的服务器 URL，会和 baseURL 合并为最终发送的 url
+  // 用于请求的服务器 URL，会和 baseURL 合并为最终发送的 URL
   url: '/user',
 
   // 创建请求时使用的方法，大小写均可
@@ -184,7 +182,7 @@ export function post(url, data, config) {
     return status >= 200 && status < 300; // 默认值
   },
 
-  // 允许自定义处理请求的适配器，接收 config 为参数，返回一个 promise 并提供一个有效的响应
+  // 允许自定义处理请求的适配器，接收本次请求的配置为参数，返回一个 promise 并提供一个有效的响应
   adapter: function (config) {
     /* ... */
   },
@@ -301,7 +299,7 @@ miniquest.interceptors.response.use(
 
 在发送请求时，通常为了安全考虑，会将用于标识用户身份的 token 放在 headers 中。如果在此时尚未获取到 token，则一般会在获取到 token 后再发送请求。然而，若存在多个请求同时并发的情况，可能会导致多次发送获取 token 的请求。
 
-在这个场景我们有两个解决办法，一是使用缓存，让同时发送获取 token 的请求返回的都是一个请求。二是使用请求锁，获取获取 token 时，将其余请求锁定，示例如下：
+在这个场景我们有两个解决办法，一是使用缓存，让同时发送获取 token 的请求返回的都是一个请求。二是使用请求锁，获取 token 时，将其余请求锁定，示例如下：
 
 ```js
 let token;

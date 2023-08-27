@@ -2,6 +2,9 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
+title: MiniQuest
+titleTemplate: Axios API 风格的小程序 HTTP 请求库
+
 hero:
   name: MiniQuest
   text: Axios API 风格的小程序 HTTP 请求库
@@ -22,7 +25,7 @@ features:
   - title: 🛠 功能丰富
     details: 支持拦截器、转换器、请求锁、缓存、轮询、错误重试等功能
   - title: 📦 极致轻量化
-    details: gzip 后大小仅为 3kb 左右，tree-shaking 后可能更小
+    details: gzip 后大小仅为 2.4kb 左右，tree-shaking 后可能更小
   - title: 🔌 完美适配
     details: 支持多个小程序平台，并提供自定义适配器功能
 ---

@@ -6,7 +6,8 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'MiniQuest',
   titleTemplate: ':title | MiniQuest',
-  description: 'axios API 风格的小程序请求库',
+  description: 'Axios API 风格的小程序 HTTP 请求库',
+  cleanUrls: true,
 
   head: [
     [
@@ -33,11 +34,24 @@ export default defineConfig({
 
     sidebar: [
       {
+        base: '/guide',
         text: '起步',
         items: [
           {
-            link: '/guide/',
-            text: '简介',
+            link: '/',
+            text: '快速上手',
+          },
+          {
+            link: '/base-case',
+            text: '基本用例',
+          },
+          {
+            link: '/base-api',
+            text: '基本 API',
+          },
+          {
+            link: '/request-config',
+            text: '请求配置',
           },
         ],
       },
@@ -49,9 +63,14 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2023 inottn',
+      copyright:
+        'Copyright © 2023 <a href="https://github.com/inottn">inottn</a>',
     },
 
     outlineTitle: '本页内容',
+    docFooter: {
+      prev: '上一页',
+      next: '下一页',
+    },
   },
 });

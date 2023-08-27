@@ -1,14 +1,14 @@
----
-title: 介绍
----
-
 # 快速上手
 
 ## 介绍
 
 MiniQuest 是一个 Axios API 风格的小程序 HTTP 请求库，适配多个小程序平台，支持拦截器、转换器、请求锁、缓存、轮询、错误重试等功能。
 
-## 小程序支持
+## 支持的小程序
+
+::: tip
+如果你使用的是 taro 或 uni-app，只要编译后的小程序平台支持，就可以使用。
+:::
 
 | 微信 | 支付宝 | 百度 | 抖音 | QQ  | 钉钉 |
 | :--: | :----: | :--: | :--: | :-: | :--: |
@@ -82,6 +82,6 @@ const miniquest = create({
 
 ```js
 miniquest({
-  url: 'https://base.domain.com/user?id=1',
+  url: '/user?id=1',
 });
 ```
