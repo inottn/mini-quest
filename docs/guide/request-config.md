@@ -42,7 +42,7 @@ outline: deep
 
 ### validateStatus
 
-允许自定义哪些 HTTP 状态码是有效的。具体参考校验状态码。
+允许自定义哪些 HTTP 状态码是有效的。具体参考[校验状态码](/guide/validate-status)。
 
 ### adapter
 

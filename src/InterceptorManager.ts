@@ -4,7 +4,7 @@ type Interceptor<T> = {
 };
 
 class InterceptorManager<T> {
-  interceptors: Interceptor<T>[] = [];
+  interceptors: (Interceptor<T> | null)[] = [];
 
   /**
    * Add a new interceptor to the stack
@@ -23,6 +23,12 @@ class InterceptorManager<T> {
       rejected,
     });
     return this.interceptors.length - 1;
+  }
+
+  eject(id: number) {
+    if (this.interceptors[id]) {
+      this.interceptors[id] = null;
+    }
   }
 
   /**

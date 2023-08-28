@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { lock } from '@inottn/fp-utils';
+import { isFunction, lock } from '@inottn/fp-utils';
 import defaults from './defaults';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './InterceptorManager';
@@ -122,7 +122,8 @@ class MiniQuest {
     this.lockRequest.release();
   }
 
-  private waitForUnlock(fn: Function) {
+  private waitForUnlock(fn?: Function) {
+    if (!isFunction(fn)) return fn;
     return (config: MergedRequestConfig) => {
       if (this.lockRequest.isLocked() && !config.skipLock) {
         return this.lockRequest.waitForUnlock().then(() => fn(config));

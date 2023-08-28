@@ -53,6 +53,18 @@ export default defineConfig({
             link: '/request-config',
             text: '请求配置',
           },
+          {
+            link: '/response-schema',
+            text: '响应结构',
+          },
+          {
+            link: '/validate-status',
+            text: '校验状态码',
+          },
+          {
+            link: '/interceptors',
+            text: '拦截器',
+          },
         ],
       },
     ],
