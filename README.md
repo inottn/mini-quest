@@ -4,6 +4,13 @@
 
 <p align="center">Axios API 风格的小程序 HTTP 请求库</p>
 
+<p align="center">
+  <img src="https://img.shields.io/npm/v/%40inottn%2Fminiquest" />
+  <img src="https://img.shields.io/bundlejs/size/%40inottn%2Fminiquest" />
+  <img src="https://img.shields.io/badge/tree_shaking-supported-4c1" />
+  <img src="https://img.shields.io/npm/l/%40inottn%2Fminiquest" />
+</p>
+
 ## 特性
 
 - 使用 TypeScript 编写，提供完整的类型定义
