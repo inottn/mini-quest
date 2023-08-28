@@ -18,11 +18,11 @@ MiniQuest 是一个 Axios API 风格的小程序 HTTP 请求库，适配多个�
 
 - 使用 TypeScript 编写，提供完整的类型定义
 - 支持 创建多个实例
-- 支持 校验状态码
-- 支持 请求／响应拦截器
-- 支持 转换请求和响应数据
-- 支持 请求锁
-- 支持 轮询
+- 支持 [校验状态码](/guide/validate-status)
+- 支持 [请求／响应拦截器](/guide/interceptors)
+- 支持 [转换请求和响应数据](/guide/transformer)
+- 支持 [请求锁](/guide/request-lock)
+- 支持 [轮询](/guide/poll)
 - 支持 上传／下载
 - 支持 自定义适配器
 - 适配 多端小程序（微信、支付宝、百度、抖音等）

@@ -12,6 +12,10 @@ outline: deep
 
 ## 通用配置选项
 
+::: tip
+暂不支持 `paramsSerializer` 配置，如有需求可以在拦截器中自行实现。
+:::
+
 ### url
 
 用于请求的服务器 URL，会和 `baseURL` 合并为最终发送的 URL。在单次请求配置中，它是必需的。
@@ -24,21 +28,23 @@ outline: deep
 
 `baseURL` 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL。
 
-### transformRequest
-
-请求转换器，允许在向服务器发送请求前，修改请求数据。具体参考转换器。
-
-### transformResponse
-
-响应转换器，允许在接收到响应后，修改响应数据。具体参考转换器。
-
 ### headers
 
 请求头，默认值为 `{ 'content-type': 'application/json' }`，字段名称不区分大小写，最终都会转化为小写的形式。
 
+上传或下载时会自动过滤掉 `content-type` 字段。
+
+### transformRequest
+
+请求转换器，允许在向服务器发送请求前，修改请求数据。具体参考[数据转换器](/guide/transformer)。
+
+### transformResponse
+
+响应转换器，允许在接收到响应后，修改响应数据。具体参考[数据转换器](/guide/transformer)。
+
 ### skipLock
 
-是否跳过请求锁。具体参考请求锁。
+是否跳过请求锁。具体参考[请求锁](/guide/request-lock)。
 
 ### validateStatus
 

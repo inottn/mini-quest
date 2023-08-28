@@ -35,7 +35,7 @@ export default defineConfig({
     sidebar: [
       {
         base: '/guide',
-        text: '起步',
+        text: '指南',
         items: [
           {
             link: '/',
@@ -64,6 +64,18 @@ export default defineConfig({
           {
             link: '/interceptors',
             text: '拦截器',
+          },
+          {
+            link: '/transformer',
+            text: '数据转换器',
+          },
+          {
+            link: '/request-lock',
+            text: '请求锁',
+          },
+          {
+            link: '/poll',
+            text: '轮询',
           },
         ],
       },

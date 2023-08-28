@@ -10,7 +10,7 @@
 - 支持 创建多个实例
 - 支持 [校验状态码](#校验状态码)
 - 支持 [请求／响应拦截器](#拦截器)
-- 支持 [转换请求和响应数据](#转换器)
+- 支持 [转换请求和响应数据](#数据转换器)
 - 支持 [请求锁](#请求锁)
 - 支持 [轮询](#轮询)
 - 支持 上传／下载
@@ -165,14 +165,14 @@ export function post(url, data, config) {
   // baseURL 将自动加在 url 前面，除非 url 是一个绝对 URL
   baseURL: 'https://some-domain.com/api/',
 
+  // 请求头
+  headers: { 'X-Requested-With': 'XMLHttpRequest' },
+
   // 请求转换器，允许在向服务器发送请求前，修改请求数据
   transformRequest: null,
 
   // 响应转换器，允许在接收到响应后，修改响应数据
   transformResponse: null,
-
-  // 请求头
-  headers: { 'X-Requested-With': 'XMLHttpRequest' },
 
   // 是否跳过请求锁
   skipLock: false,
@@ -260,9 +260,9 @@ miniquest.interceptors.response.use(
 1. 先添加的请求拦截器后执行，后添加的请求拦截器先执行。
 2. 先添加的响应拦截器先执行，后添加的响应拦截器后执行。
 
-## 转换器
+## 数据转换器
 
-`transformRequest` 允许在向服务器发送请求前，修改请求数据。它会在请求拦截器后执行。
+`transformRequest` 允许在向服务器发送请求前，修改请求数据。它会在请求拦截器后执行：
 
 ```js
 {
@@ -273,7 +273,7 @@ miniquest.interceptors.response.use(
 }
 ```
 
-`transformResponse` 允许在接收到响应后，修改响应数据。它会在响应拦截器前执行。
+`transformResponse` 允许在接收到响应后，修改响应数据。它会在响应拦截器前执行：
 
 ```js
 {
