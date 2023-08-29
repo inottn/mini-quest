@@ -3,9 +3,9 @@
 当请求锁定后，所有未发送的请求将依次等待，直到请求解锁时才能继续发送。请求锁提供了如下 API：
 
 - `miniquest.lock()` 将请求锁定
-- `miniquest.unlock()` 将请求解锁
+- `miniquest.unlock()` 将请求解锁，锁定期间待处理的请求将依次执行
+- `miniquest.interrupt()` 将请求解锁，锁定期间待处理的请求将中断并抛出错误
 - `miniquest.isLocked()` 返回请求是否锁定
-- `miniquest.release()` 将锁定期间待处理的请求释放
 
 在发送请求时，通常为了安全考虑，会将用于标识用户身份的 token 放在 headers 中。如果在此时尚未获取到 token，则一般会在获取到 token 后再发送请求。然而，若存在多个请求同时并发的情况，可能会导致多次发送获取 token 的请求。
 
@@ -34,17 +34,19 @@ miniquest.interceptors.request.use(function (config) {
     // 没有 token 时将请求锁定
     miniquest.lock();
 
-    getToken()
+    return getToken()
       .then((token) => {
         config.headers.token = token;
 
         // 获取 token 后将请求解锁
         miniquest.unlock();
+
+        // 返回请求配置，使当前请求继续执行
+        return config;
       })
       .catch(() => {
-        // 获取 token 失败则待处理的请求失效，可以全部释放掉
-        miniquest.release();
-        miniquest.unlock();
+        // 获取 token 失败则待处理的请求全部中断
+        miniquest.interrupt();
       });
   } else {
     config.headers.token = token;

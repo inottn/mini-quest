@@ -3,6 +3,29 @@ import { createMockAdapter } from './mock';
 import { create } from '../src';
 
 describe('transformData', () => {
+  it('default transformRequest', async () => {
+    const { adapter, setResponse } = createMockAdapter();
+    const response = {
+      headers: {
+        'test-field': 'test-value',
+      },
+      status: 200,
+      data: 1,
+    };
+    const miniquest = create({
+      adapter,
+    });
+
+    setResponse(response);
+    await miniquest.post('test', {
+      data: {
+        a: undefined,
+        b: 1,
+      },
+    });
+    expect(adapter.mock.lastCall?.[0].data).toEqual({ b: 1 });
+  });
+
   it('transformResponse', async () => {
     const { adapter, setResponse } = createMockAdapter();
     const response = {

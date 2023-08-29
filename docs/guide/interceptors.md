@@ -13,7 +13,7 @@ miniquest.interceptors.request.use(
     return config;
   },
   function (error) {
-    // 对请求错误做些什么
+    // 根据上一个请求拦截器抛出的错误做些什么
     return Promise.reject(error);
   },
 );

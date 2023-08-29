@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
-import { isFunction, lock } from '@inottn/fp-utils';
+import { isFunction, withResolvers } from '@inottn/fp-utils';
+import { aliasMethods } from './constants';
 import defaults from './defaults';
 import dispatchRequest from './dispatchRequest';
+import { createError } from './error';
 import InterceptorManager from './InterceptorManager';
 import mergeConfig from './mergeConfig';
 import type {
@@ -35,9 +37,11 @@ type MiniQuestInstance = MiniQuest['request'] & MiniQuest;
 interface MiniQuest extends AliasMethodMapped {}
 
 class MiniQuest {
-  defaults?: InstanceConfig;
+  private locked = false;
 
-  lockRequest = lock(dispatchRequest);
+  private unlockResolves?: ReturnType<typeof withResolvers<void>>;
+
+  defaults?: InstanceConfig;
 
   interceptors = {
     request: new InterceptorManager<MergedRequestConfig>(),
@@ -46,7 +50,6 @@ class MiniQuest {
 
   constructor(instanceConfig?: InstanceConfig) {
     this.defaults = mergeConfig(defaults, instanceConfig);
-    this.bindAliasMethods();
   }
 
   request<T = any, R = Response<T>, D = any>(
@@ -77,7 +80,7 @@ class MiniQuest {
       delete config.headers['content-type'];
     }
 
-    const chain: any[] = [this.lockRequest, undefined];
+    const chain: any[] = [dispatchRequest, undefined];
     let promise = Promise.resolve(config);
 
     this.interceptors.request.forEach(
@@ -87,10 +90,7 @@ class MiniQuest {
     );
 
     while (chain.length) {
-      promise = promise.then(
-        this.waitForUnlock(chain.shift()),
-        this.waitForUnlock(chain.shift()),
-      );
+      promise = promise.then(this.waitForUnlock(chain.shift()), chain.shift());
     }
 
     this.interceptors.response.forEach(
@@ -107,54 +107,40 @@ class MiniQuest {
   }
 
   lock() {
-    this.lockRequest.lock();
+    if (!this.locked) {
+      this.unlockResolves = withResolvers();
+      this.locked = true;
+    }
   }
 
   unlock() {
-    this.lockRequest.unlock();
+    this.locked = false;
+    this.unlockResolves?.resolve();
+  }
+
+  interrupt() {
+    this.locked = false;
+    this.unlockResolves?.reject();
   }
 
   isLocked() {
-    return this.lockRequest.isLocked();
-  }
-
-  release() {
-    this.lockRequest.release();
+    return this.locked;
   }
 
   private waitForUnlock(fn?: Function) {
     if (!isFunction(fn)) return fn;
-    return (config: MergedRequestConfig) => {
-      if (this.lockRequest.isLocked() && !config.skipLock) {
-        return this.lockRequest.waitForUnlock().then(() => fn(config));
-      }
 
-      if (fn === this.lockRequest) return dispatchRequest(config);
+    return (config: MergedRequestConfig) => {
+      if (this.isLocked() && !config.skipLock) {
+        return this.unlockResolves?.promise
+          .then(() => fn(config))
+          .catch(() => {
+            throw createError('request interrupted', { config });
+          });
+      }
 
       return fn(config);
     };
-  }
-
-  private bindAliasMethods() {
-    const methods: AliasMethod[] = [
-      'delete',
-      'download',
-      'get',
-      'head',
-      'options',
-      'post',
-      'put',
-      'upload',
-    ];
-    methods.forEach((method) => {
-      this[method] = <T, R, D>(
-        url: string,
-        config: RequestConfigWithoutUrl = {},
-      ) => {
-        config.method = method;
-        return this.request<T, R, D>(url, config);
-      };
-    });
   }
 
   static create(instanceConfig?: InstanceConfig) {
@@ -164,6 +150,16 @@ class MiniQuest {
     return request as MiniQuestInstance;
   }
 }
+
+aliasMethods.forEach((method) => {
+  MiniQuest.prototype[method] = function <T, R, D>(
+    url: string,
+    config: RequestConfigWithoutUrl = {},
+  ) {
+    config.method = method;
+    return this.request<T, R, D>(url, config);
+  };
+});
 
 export function create(instanceConfig?: InstanceConfig) {
   return MiniQuest.create(instanceConfig);
