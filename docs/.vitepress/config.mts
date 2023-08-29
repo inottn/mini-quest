@@ -91,6 +91,15 @@ export default defineConfig({
         'Copyright © 2023 <a href="https://github.com/inottn">inottn</a>',
     },
 
+    search: {
+      provider: 'algolia',
+      options: {
+        appId: '634QJQ6JTU',
+        apiKey: 'c797305b9a3efacb9d50b827893e7181',
+        indexName: 'miniquest',
+      },
+    },
+
     outlineTitle: '本页内容',
     docFooter: {
       prev: '上一页',
