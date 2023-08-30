@@ -32,4 +32,16 @@ describe('adapter', () => {
     setResponse(rawResponse);
     expect(miniquest.get('test')).resolves.toMatchObject(rawResponse);
   });
+
+  it('adapter is not a function', () => {
+    const wrongAdapters: any[] = [null, undefined, 0, 1, '0', '', true, false];
+    wrongAdapters.forEach((adapter) => {
+      const miniquest = create({
+        adapter,
+      });
+      expect(miniquest.get('test')).rejects.toThrowError(
+        'adapter must be a function',
+      );
+    });
+  });
 });

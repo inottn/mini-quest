@@ -48,6 +48,30 @@ describe('transformData', () => {
     await miniquest.get('test');
   });
 
+  it('call transformResponse in the catch', async () => {
+    const { adapter, setResponse } = createMockAdapter();
+    const response = {
+      headers: {
+        'test-field': 'test-value',
+      },
+      status: 400,
+      data: 1,
+    };
+    const miniquest = create({
+      adapter,
+      transformResponse: function (data, headers, status) {
+        expect(data).toBe(response.data);
+        expect(headers).toBe(response.headers);
+        expect(status).toBe(response.status);
+      },
+    });
+
+    setResponse(response);
+    await expect(miniquest.get('test')).rejects.toThrowError(
+      'http status error',
+    );
+  });
+
   it('passed transformResponse is an array', async () => {
     const { adapter, setResponse } = createMockAdapter();
     const response = {

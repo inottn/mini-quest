@@ -1,4 +1,5 @@
 import { isFunction } from '@inottn/fp-utils';
+import { createError } from './error';
 import createSettle from './settle';
 import transformData from './transformData';
 import type { MiniQuestError } from './error';
@@ -19,7 +20,8 @@ export default function dispatchRequest(config: MergedRequestConfig) {
     config.data = transformData.call(config, config.transformRequest);
   }
 
-  if (!isFunction(config.adapter)) throw Error('adapter must be a function');
+  if (!isFunction(config.adapter))
+    throw createError('adapter must be a function', { config });
 
   return config
     .adapter(config)
