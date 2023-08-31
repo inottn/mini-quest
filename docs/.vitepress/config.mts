@@ -77,6 +77,10 @@ export default defineConfig({
             link: '/poll',
             text: '轮询',
           },
+          {
+            link: '/upload',
+            text: '上传',
+          },
         ],
       },
     ],

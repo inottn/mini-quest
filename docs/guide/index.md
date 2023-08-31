@@ -23,7 +23,7 @@ MiniQuest 是一个 Axios API 风格的小程序 HTTP 请求库，适配多个�
 - 支持 [转换请求和响应数据](/guide/transformer)
 - 支持 [请求锁](/guide/request-lock)
 - 支持 [轮询](/guide/poll)
-- 支持 上传／下载
+- 支持 [上传](/upload)／下载
 - 支持 自定义适配器
 - 适配 多端小程序（微信、支付宝、百度、抖音等）
 

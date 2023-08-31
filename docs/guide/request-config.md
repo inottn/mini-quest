@@ -13,7 +13,7 @@ outline: deep
 ## 通用配置选项
 
 ::: tip
-暂不支持 `paramsSerializer` 配置，如有需求可以在拦截器中自行实现。
+暂不支持 `params` 和 `paramsSerializer` 配置，如有需求可以在拦截器中自行实现。
 :::
 
 ### url
