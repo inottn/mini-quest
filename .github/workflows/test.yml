@@ -31,6 +31,9 @@ jobs:
       - name: Run linter
         run: pnpm run lint
 
+      - name: Run type linter
+        run: pnpm run lint:tsc
+
   test:
     runs-on: ubuntu-latest
     steps:
