@@ -1,22 +1,54 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { clearMock, mockRequest } from './mockAlipaySdk';
+import { describe, expect, it, vi } from 'vitest';
 import { createMockAdapter } from './mock';
 import { create } from '../src';
 
-describe('adapter', () => {
-  beforeEach(() => {
-    clearMock();
-  });
+const { mockedRequest, mockedUpload, setResponse } = vi.hoisted(() => {
+  let mockedResponse: any;
+  return {
+    setResponse: (response: any) => {
+      mockedResponse = response;
+    },
+    mockedRequest: vi.fn((config) => {
+      config.complete(mockedResponse);
+    }),
+    mockedUpload: vi.fn((config) => {
+      config.complete(mockedResponse);
+    }),
+  };
+});
 
-  it('default adapter', () => {
+vi.mock('../src/utils.ts', async () => {
+  const actual = (await vi.importActual('../src/utils.ts')) as any;
+  return {
+    ...actual,
+    sdkRequest: mockedRequest,
+    sdkUpload: mockedUpload,
+  };
+});
+
+describe('adapter', () => {
+  it('default adapter', async () => {
     const miniquest = create();
     const rawResponse = {
       headers: {},
       status: 200,
       data: 'test',
     };
-    mockRequest(rawResponse);
+    setResponse(rawResponse);
     expect(miniquest.get('test')).resolves.toMatchObject(rawResponse);
+
+    // 上传
+    const uploadData = {
+      test: 'test',
+    };
+    await miniquest.upload('test', {
+      filePath: 'xxx',
+      name: 'xxx',
+      data: uploadData,
+    });
+    // data 字段将传递给默认适配器的 formData 字段
+    expect(mockedUpload.mock.lastCall?.[0]).toHaveProperty('formData');
+    expect(mockedUpload.mock.lastCall?.[0].formData).toBe(uploadData);
   });
 
   it('custom adapter', () => {

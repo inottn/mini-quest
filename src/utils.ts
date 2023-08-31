@@ -76,6 +76,10 @@ export function transformConfig(config: MergedRequestConfig) {
     },
   );
 
+  if (method === 'UPLOAD' && transformedConfig.data) {
+    transformedConfig.formData = transformedConfig.data;
+  }
+
   if ((!isAlipay && !isDingDing) || ['DOWNLOAD', 'UPLOAD'].includes(method!)) {
     transformedConfig.header = config.headers;
     delete transformedConfig.headers;

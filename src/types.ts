@@ -93,4 +93,5 @@ export interface TransformedRequestConfig<D = any, T = any>
   method: MergedRequestMethod;
   header?: RequestHeaders;
   headers?: RequestHeaders;
+  formData?: D;
 }
