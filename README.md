@@ -45,7 +45,7 @@ npm i @inottn/miniquest
 
 ## 基本用例
 
-默认导出了一个 `MiniQuest` 的实例
+默认导出了一个 `MiniQuest` 的实例：
 
 ```js
 import miniquest from '@inottn/miniquest';
@@ -55,7 +55,7 @@ import axios from '@inottn/miniquest';
 import http from '@inottn/miniquest';
 ```
 
-如果有需要，你也可以使用自定义配置新建一个实例。
+如果有需要，你也可以使用自定义配置新建一个实例：
 
 ```js
 import { create } from '@inottn/miniquest';
@@ -67,7 +67,7 @@ const miniquest = create({
 });
 ```
 
-发送 GET 请求，`miniquest` 是 `miniquest.request` 的别名
+发送 GET 请求，`miniquest` 是 `miniquest.request` 的别名：
 
 ```js
 miniquest({ url: '/user?id=1' });
@@ -83,7 +83,7 @@ miniquest.get('/user', {
 });
 ```
 
-发送 POST 请求
+发送 POST 请求：
 
 ```js
 miniquest({
@@ -109,7 +109,7 @@ miniquest.post({
 });
 ```
 
-并发请求
+并发请求：
 
 ```js
 Promise.all([miniquest.get('/user?id=1'), miniquest.get('/user?id=2')]).then(
@@ -121,7 +121,7 @@ Promise.all([miniquest.get('/user?id=1'), miniquest.get('/user?id=2')]).then(
 
 ## 实例方法
 
-为了方便起见，为常用且支持的请求方法提供了别名。不同小程序平台支持的请求方法会有所不同，以实际情况为准。
+为了方便起见，为常用且支持的请求方法提供了别名。不同小程序平台支持的请求方法会有所不同，以实际情况为准：
 
 - miniquest.request(config)
 
@@ -143,7 +143,7 @@ Promise.all([miniquest.get('/user?id=1'), miniquest.get('/user?id=2')]).then(
 
 - miniquest.upload(url[, config])
 
-注意这和 axios 提供的实例方法略有不同，如果你更习惯 axios 提供的传参方式，你也可以基于此再封装一层。
+注意这和 axios 提供的实例方法略有不同，如果你更习惯 axios 提供的传参方式，你也可以基于此再封装一层：
 
 ```js
 export function post(url, data, config) {
@@ -156,7 +156,7 @@ export function post(url, data, config) {
 
 ## 请求配置
 
-这些是创建请求时可以用的通用配置选项。只有 url 是必需的。如果没有指定 method，请求将默认使用 GET 方法。
+这些是创建请求时可以用的通用配置选项。只有 `url` 是必需的。如果没有指定 `method`，请求将默认使用 GET 方法。
 
 实例配置和单次请求配置将会合并为最终请求时的配置，相同的选项，后者会覆盖前者。
 
@@ -350,7 +350,7 @@ miniquest.interceptors.request.use(function (config) {
 
 提供了 `poll` 和 `poll.create` API 用来轮询。
 
-调用 `poll` 后会立即开始轮询。
+调用 `poll` 后会立即开始轮询：
 
 ```js
 poll(() => miniquest.get('/user?id=1'), {
@@ -360,7 +360,7 @@ poll(() => miniquest.get('/user?id=1'), {
 });
 ```
 
-也可以调用 `poll.create` 创建一个轮询函数。
+也可以调用 `poll.create` 创建一个轮询函数：
 
 ```js
 const pollFn = poll.create(() => miniquest.get('/user?id=1'), {

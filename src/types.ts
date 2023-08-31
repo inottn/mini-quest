@@ -64,6 +64,19 @@ export interface RequestConfigWithoutUrl<D = any, T = any>
   data?: D;
 }
 
+export interface DownloadConfigWithoutUrl<D = any, T = any>
+  extends InstanceConfig<D, T> {
+  filePath?: string;
+}
+
+export interface UploadConfigWithoutUrl<D = any, T = any>
+  extends InstanceConfig<D, T> {
+  filePath: string;
+  name: string;
+  data?: D;
+  formData?: D;
+}
+
 export interface RequestConfig<D = any, T = any>
   extends RequestConfigWithoutUrl<D, T> {
   url: string;

@@ -13,6 +13,8 @@ import type {
   Response,
   MergedRequestConfig,
   MergedRequestMethod,
+  DownloadConfigWithoutUrl,
+  UploadConfigWithoutUrl,
 } from './types';
 
 type AliasMethod =
@@ -26,9 +28,22 @@ type AliasMethod =
   | 'upload';
 
 type AliasMethodMapped = {
-  [key in AliasMethod]: <T, R = Response<T>, D = any>(
+  [key in Exclude<AliasMethod, 'download' | 'upload'>]: <
+    T,
+    R = Response<T>,
+    D = any,
+  >(
     url: string,
     config?: RequestConfigWithoutUrl<D>,
+  ) => Promise<R>;
+} & {
+  download: <T, R = Response<T>, D = any>(
+    url: string,
+    config?: DownloadConfigWithoutUrl<D>,
+  ) => Promise<R>;
+  upload: <T, R = Response<T>, D = any>(
+    url: string,
+    config?: UploadConfigWithoutUrl<D>,
   ) => Promise<R>;
 };
 
