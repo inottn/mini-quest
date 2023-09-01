@@ -1,6 +1,6 @@
 {
   "name": "@inottn/miniquest",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "packageManager": "pnpm@8.6.10",
   "description": "axios API 风格的小程序请求库，适配多个小程序平台",
   "author": "inottn<https://github.com/inottn>",
@@ -65,10 +65,10 @@
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.3",
     "nano-staged": "^0.8.0",
-    "prettier": "^3.0.2",
+    "prettier": "^3.0.3",
     "rimraf": "^5.0.1",
     "rollup": "^3.28.1",
-    "rollup-plugin-dts": "^6.0.0",
+    "rollup-plugin-dts": "^6.0.1",
     "rollup-plugin-esbuild": "^5.0.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.3"
