@@ -8,7 +8,7 @@ outline: deep
 
 提供了 `poll` 和 `poll.create` API 用来轮询。
 
-`poll(fn, options)` 接收两个参数，`fn` 是需要轮询的函数，`options` 时轮询的[配置选项](#参数)。
+`poll(fn, options)` 接收两个参数，`fn` 是需要轮询的函数，`options` 是轮询的[配置选项](#参数)。
 
 调用 `poll` 后会立即开始轮询，并返回表示轮询结果的 promise 对象：
 
