@@ -184,4 +184,4 @@ const miniquest = create();
 
 export default miniquest;
 
-export { poll } from '@inottn/fp-utils';
+export { poll, retry } from '@inottn/fp-utils';

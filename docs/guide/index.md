@@ -17,6 +17,7 @@ MiniQuest 是一个 Axios API 风格的小程序 HTTP 请求库，适配多个�
 ## 特性
 
 - 使用 TypeScript 编写，提供完整的类型定义
+- 超过 95% 的单元测试覆盖率，提供稳定性保障
 - 支持 创建多个实例
 - 支持 [校验状态码](/guide/validate-status)
 - 支持 [请求／响应拦截器](/guide/interceptors)
