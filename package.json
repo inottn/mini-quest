@@ -4,7 +4,7 @@
   "packageManager": "pnpm@8.7.0",
   "description": "axios API 风格的小程序请求库，适配多个小程序平台",
   "author": "inottn<https://github.com/inottn>",
-  "homepage": "https://github.com/inottn/miniquest",
+  "homepage": "https://github.com/inottn/mini-quest",
   "main": "dist/index-cjs.js",
   "module": "dist/index-esm.js",
   "types": "index.d.ts",
@@ -50,11 +50,11 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/inottn/miniquest/issues"
+    "url": "https://github.com/inottn/mini-quest/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:inottn/miniquest.git"
+    "url": "git@github.com:inottn/mini-quest.git"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.4",

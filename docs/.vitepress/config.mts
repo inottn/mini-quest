@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/miniquest/',
+  base: '/mini-quest/',
   lang: 'zh-CN',
   title: 'MiniQuest',
   titleTemplate: ':title | MiniQuest',
@@ -86,7 +86,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/inottn/miniquest' },
+      { icon: 'github', link: 'https://github.com/inottn/mini-quest' },
     ],
 
     footer: {
