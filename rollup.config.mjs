@@ -1,11 +1,9 @@
 import esbuild from 'rollup-plugin-esbuild';
 import dts from 'rollup-plugin-dts';
-import commonjs from '@rollup/plugin-commonjs';
 
 const entries = ['./src/index.ts'];
 
 const plugins = [
-  commonjs(),
   esbuild({
     target: 'chrome55',
   }),
