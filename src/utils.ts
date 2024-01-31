@@ -88,6 +88,14 @@ export function transformConfig(config: MergedRequestConfig) {
   return transformedConfig;
 }
 
+const tryParseJSON = (text: string) => {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+};
+
 export function transformResponse(
   rawResponse: RawResponse,
   config: MergedRequestConfig,
@@ -100,6 +108,13 @@ export function transformResponse(
 
   if (!response.headers && response.header) {
     response.headers = response.header;
+  }
+
+  if (
+    response.config.method === 'UPLOAD' &&
+    typeof response.data === 'string'
+  ) {
+    response.data = tryParseJSON(response.data);
   }
 
   return response as Response;
