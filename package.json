@@ -1,6 +1,6 @@
 {
   "name": "@inottn/miniquest",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "packageManager": "pnpm@8.7.0",
   "description": "axios API 风格的小程序请求库，适配多个小程序平台",
   "author": "inottn<https://github.com/inottn>",
