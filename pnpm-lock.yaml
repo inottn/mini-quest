@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@inottn/fp-utils':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.3
+        version: 0.4.3
     devDependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.5.0
@@ -1089,8 +1089,8 @@ packages:
       - supports-color
     dev: true
 
-  /@inottn/fp-utils@0.4.0:
-    resolution: {integrity: sha512-65cbQ+fRne1kNdVue9RGFh+F/apoHPD82mYLaXtU92GiZ3wy5d5WELDZ3P9ZtoYthEdkvHjliXjTews34cagkw==}
+  /@inottn/fp-utils@0.4.3:
+    resolution: {integrity: sha512-9vMvUYXIskF7Jp2oigWD4pOXcmyCH4eAhZPmJF2ijTyIA9ar0qtHMxd/iaK0lDCmoRpfxqYxG2fCF7ZgD31v1Q==}
     dev: false
 
   /@isaacs/cliui@8.0.2:

@@ -73,6 +73,6 @@
     "vitest": "^1.1.3"
   },
   "dependencies": {
-    "@inottn/fp-utils": "^0.4.0"
+    "@inottn/fp-utils": "^0.4.3"
   }
 }
