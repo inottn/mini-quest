@@ -67,7 +67,7 @@ export const sdkUpload = sdk.uploadFile.bind(sdk);
 export const sdkDownload = sdk.downloadFile.bind(sdk);
 
 export function transformConfig(config: MergedRequestConfig) {
-  const { baseURL, url, method } = config;
+  const { baseURL, method, url } = config;
   const transformedConfig: TransformedRequestConfig = Object.assign(
     {},
     config,
@@ -76,8 +76,16 @@ export function transformConfig(config: MergedRequestConfig) {
     },
   );
 
-  if (method === 'UPLOAD' && transformedConfig.data) {
-    transformedConfig.formData = transformedConfig.data;
+  if (method === 'DOWNLOAD') {
+    transformedConfig.method = 'GET';
+  }
+
+  if (method === 'UPLOAD') {
+    transformedConfig.method = 'POST';
+
+    if (transformedConfig.data) {
+      transformedConfig.formData = transformedConfig.data;
+    }
   }
 
   if ((!isAlipay && !isDingDing) || ['DOWNLOAD', 'UPLOAD'].includes(method!)) {
